@@ -17,6 +17,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.15.1",
   "dependencies": {
+    "@prisma/client": "^6.16.2",
     "@types/node": "^24.5.2",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
@@ -26,6 +27,7 @@
     "node": "^24.8.0",
     "pino": "^9.11.0",
     "pino-http": "^10.5.0",
+    "prisma": "^6.16.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
