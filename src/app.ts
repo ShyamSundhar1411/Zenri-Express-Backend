@@ -6,6 +6,8 @@ import { compressionMiddleware } from "./middlewares/compression";
 import { loggerMiddleware } from "./middlewares/logger";
 import swaggerUi from "swagger-ui-express"
 import { swaggerSpec } from "./config/swagger"
+import zenriRouter from "./routes";
+import { errorHandler } from "./utils/errorHandler";
 const app: Express = express();
 app.use(jsonParser);
 app.use(corsMiddleware);
@@ -18,5 +20,6 @@ app.get("/health",(req:Request,res:Response) => [
         message:"Server is up and running"
     })
 ])
-
+app.use("/api/v1",zenriRouter)
+app.use(errorHandler)
 export default app;
