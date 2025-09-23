@@ -2,7 +2,7 @@ model User {
     id           String        @id @default(uuid())
     userName     String        @unique
     email        String        @unique
-    password     String
+    supabaseUserId  String?    
     bankAccounts BankAccount[]
     creditCards  CreditCard[]
     isDisabled   Boolean       @default(false)
