@@ -1,0 +1,83 @@
+model AccountType {
+    id              String @id @default(uuid())
+    accountTypeName String @unique
+
+    bankAccounts BankAccount[]
+    isDisabled   Boolean       @default(false)
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+}
+
+model CardNetwork {
+    id          String       @id @default(uuid())
+    networkName String       @unique
+    creditCards CreditCard[]
+    debitCards  DebitCard[]
+    isDisabled  Boolean      @default(false)
+    createdAt   DateTime     @default(now())
+
+    updatedAt DateTime @updatedAt
+}
+
+enum AccountStatus {
+    ACTIVE
+    CLOSED
+    FROZEN
+    SUSPENDED
+}
+
+model BankAccount {
+    id            String        @id @default(uuid())
+    accountNumber String        @unique @db.VarChar(20)
+    accountType   AccountType   @relation(fields: [accountTypeId], references: [id])
+    accountTypeId String
+    bankName      String
+    balance       Decimal       @default(0.0)
+    user          User          @relation(fields: [userId], references: [id])
+    userId        String
+    debitCards    DebitCard[]
+    status        AccountStatus @default(ACTIVE)
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+
+    @@unique([accountNumber, bankName])
+    @@index([userId])
+}
+
+enum CardStatus {
+    ACTIVE
+    BLOCKED
+    EXPIRED
+}
+
+model CreditCard {
+    id         String      @id @default(uuid())
+    cardNumber String      @unique @db.VarChar(19)
+    network    CardNetwork @relation(fields: [networkId], references: [id])
+    networkId  String
+    issuer     String
+    limit      Decimal
+    balance    Decimal     @default(0)
+    expiresAt  DateTime
+
+    userId    String
+    user      User       @relation(fields: [userId], references: [id])
+    status    CardStatus @default(ACTIVE)
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+
+    @@index([userId])
+}
+
+model DebitCard {
+    id            String      @id @default(uuid())
+    cardNumber    String      @unique @db.VarChar(19)
+    network       CardNetwork @relation(fields: [networkId], references: [id])
+    networkId     String
+    bankAccountId String
+    bankAccount   BankAccount @relation(fields: [bankAccountId], references: [id])
+    expiresAt     DateTime
+    status        CardStatus  @default(ACTIVE)
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+}
