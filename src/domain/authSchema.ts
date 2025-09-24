@@ -18,3 +18,4 @@ export const loginSchema = z.object({
 })
 
 export type signUpRequest = z.infer<typeof signUpSchema>
+export type logInRequest = z.infer<typeof loginSchema>

@@ -1,4 +1,4 @@
-import { signUpRequest } from "../../domain/authSchema";
+import { logInRequest, signUpRequest } from "../../domain/authSchema";
 
 import { supabase } from "../../config/supabase";
 import { IAuthService } from "../IAuthService";
@@ -8,8 +8,60 @@ import { userSchemaWithTokens, UserWithToken } from "../../domain/userSchema";
 import { ServiceResult } from "../../domain/interfaces";
 
 
+
 export class AuthService implements IAuthService {
-    async signUp(requestData: signUpRequest): Promise<ServiceResult<UserWithToken>> {
+    async login(requestData: logInRequest): Promise<ServiceResult<UserWithToken>> {
+        try{
+            const {email,password} = requestData;
+            const {data:supabaseUserData, error:supabaseError} = await supabase.auth.signInWithPassword(
+                {
+                    email:email,
+                    password:password
+                }
+            )
+            if(supabaseError){
+                return {
+                    statusCode: 401,
+                    error: supabaseError.message
+                }
+            }
+            const user = await prismaClient.user.findFirst({
+                where: {
+                    supabaseUserId: supabaseUserData.user.id
+                }
+            })
+            if(!user){
+                return {
+                    error: "No account found with the provided credentials",
+                    statusCode: 401
+                }
+            }
+            return {
+                data: userSchemaWithTokens.parse({
+                    user: {
+                        id: user.id,
+                        email: user.email,
+                        userName: user.userName,
+                        supabaseUserId: user.supabaseUserId,
+                        createdAt: user.createdAt.toISOString(),
+                        updatedAt: user.updatedAt.toISOString(),
+                    },
+                    tokens: {
+                        accessToken: supabaseUserData.session.access_token,
+                        refreshToken: supabaseUserData.session.refresh_token,
+                    }
+                }),
+                statusCode: 200
+            }
+        }
+        catch(err:any){
+            return {
+                error: err,
+                statusCode: 400,
+            }
+        }
+    }
+    async signup(requestData: signUpRequest): Promise<ServiceResult<UserWithToken>> {
         try {
             const { email, userName, password } = requestData;
             const existingUser = await prismaClient.user.findUnique({
@@ -19,6 +71,7 @@ export class AuthService implements IAuthService {
             })
             if (existingUser) {
                 return {
+                    statusCode: 400,
                     error: "User with this email already exists"
                 }
             }
@@ -28,6 +81,7 @@ export class AuthService implements IAuthService {
             })
             if (signUpError) {
                 return {
+                    statusCode: 400,
                     error: signUpError.message
                 }
             }
@@ -47,6 +101,7 @@ export class AuthService implements IAuthService {
             )
             if(signInError){
                 return {
+                    statusCode: 401,
                     error:signInError.message
                 }
             }
@@ -64,11 +119,13 @@ export class AuthService implements IAuthService {
                         accessToken: signInData.session.access_token,
                         refreshToken: signInData.session.refresh_token,
                     }
-                })
+                }),
+                statusCode: 201
             }
         }
         catch (err: any) {
             return {
+                statusCode: 400,
                 error: err
             }
         }
