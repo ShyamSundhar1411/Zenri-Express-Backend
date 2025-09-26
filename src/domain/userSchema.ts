@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userSchema = z.object({
+export const UserSchema = z.object({
   id: z.string(),
   email: z.email(),
   userName: z.string(),
@@ -9,12 +9,12 @@ export const userSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const userSchemaWithTokens = z.object({
-    user: userSchema,
+export const UserSchemaWithTokens = z.object({
+    user: UserSchema,
     tokens: z.object({
         accessToken: z.string(),
         refreshToken: z.string(),
     })
 })
 
-export type UserWithToken = z.infer<typeof userSchemaWithTokens>;
+export type UserWithToken = z.infer<typeof UserSchemaWithTokens>;
