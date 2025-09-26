@@ -5,8 +5,8 @@ export const UserSchema = z.object({
   email: z.email(),
   userName: z.string(),
   supabaseUserId: z.string().nullable(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 export const UserSchemaWithTokens = z.object({

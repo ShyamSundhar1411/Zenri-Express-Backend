@@ -53,8 +53,8 @@ enum CardStatus {
 model CreditCard {
     id         String      @id @default(uuid())
     cardNumber String      @unique @db.VarChar(19)
-    network    CardNetwork @relation(fields: [networkId], references: [id])
-    networkId  String
+    cardNetwork    CardNetwork @relation(fields: [cardNetworkId], references: [id])
+    cardNetworkId  String
     issuer     String
     limit      Decimal
     balance    Decimal     @default(0)
@@ -72,8 +72,8 @@ model CreditCard {
 model DebitCard {
     id            String      @id @default(uuid())
     cardNumber    String      @unique @db.VarChar(19)
-    network       CardNetwork @relation(fields: [networkId], references: [id])
-    networkId     String
+    cardNetwork       CardNetwork @relation(fields: [cardNetworkId], references: [id])
+    cardNetworkId     String
     bankAccountId String
     bankAccount   BankAccount @relation(fields: [bankAccountId], references: [id])
     expiresAt     DateTime

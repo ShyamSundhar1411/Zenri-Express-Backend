@@ -1,21 +1,21 @@
 import {z} from "zod";
 import { UserSchema } from "./userSchema";
-import { BankAccount } from "../generated";
+
 
 export const AccountTypeSchema = z.object({
     id: z.string(),
     accountTypeName: z.string(),
     isDisabled: z.boolean(),
-    createdAt: z.iso.datetime(),
-    updatedAt: z.iso.datetime(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
 })
 
 export const CardNetworkSchema = z.object({
     id: z.string(),
     networkName: z.string(),
     isDisabled: z.boolean(),
-    createdAt: z.iso.datetime(),
-    updatedAt: z.iso.datetime(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
 })
 
 export const AccountStatus = z.enum([
@@ -30,11 +30,44 @@ export const  BankAccountSchema = z.object({
     accountTyp: AccountTypeSchema,
     bankName: z.string(),
     balance: z.number(),
-    user: UserSchema,
+    userId: z.string(),
     status: AccountStatus.default("ACTIVE"),
-    createdAt: z.iso.datetime(),
-    updatedAt: z.iso.datetime(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
 })
-
-
-export type BankAccounts = z.infer<BankAccount []>
+export const CardStatus = z.enum([
+    "ACTIVE",
+    'BLOCKED',
+    "EXPIRED"
+])
+export const CreditCardSchema = z.object({
+    id: z.string(),
+    cardNumber: z.string(),
+    cardNetworkId: z.string(),
+    issuer: z.string(),
+    balance: z.string(),
+    expiresAt: z.coerce.date(),
+    userId: z.string(),
+    status: CardStatus.default("ACTIVE"),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+})
+export const DebitCardSchema = z.object({
+    id: z.string(),
+    cardNumber: z.string(),
+    cardNetworkId: z.string(),
+    bankAccountId: z.string(),
+    expiresAt: z.coerce.date(),
+    userId: z.string(),
+    status: CardStatus.default("ACTIVE"),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+})
+export type AccountType = z.infer<typeof AccountTypeSchema>
+export type AccountTypes = z.infer<typeof AccountTypeSchema []>
+export type BankAccount = z.infer<typeof BankAccountSchema>
+export type BankAccounts = z.infer<typeof BankAccountSchema []>
+export type CreditCard  = z.infer<typeof CreditCardSchema>
+export type CreditCards = z.infer<typeof CreditCardSchema []>
+export type DebitCard = z.infer<typeof DebitCardSchema>
+export type DebitCards = z.infer<typeof DebitCardSchema []>

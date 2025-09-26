@@ -1,16 +1,16 @@
-import { logInRequest, signUpRequest } from "../../domain/authSchema";
+import { LoginRequest, SignUpRequest } from "../../domain/authSchema";
 
 import { supabase } from "../../config/supabase";
 import { IAuthService } from "../IAuthService";
 
 import prismaClient from "../../config/prismaClient";
-import { userSchemaWithTokens, UserWithToken } from "../../domain/userSchema";
+import { UserSchemaWithTokens, UserWithToken } from "../../domain/userSchema";
 import { ServiceResult } from "../../domain/interfaces";
 
 
 
 export class AuthService implements IAuthService {
-    async login(requestData: logInRequest): Promise<ServiceResult<UserWithToken>> {
+    async login(requestData: LoginRequest): Promise<ServiceResult<UserWithToken>> {
         try{
             const {email,password} = requestData;
             const {data:supabaseUserData, error:supabaseError} = await supabase.auth.signInWithPassword(
@@ -37,7 +37,7 @@ export class AuthService implements IAuthService {
                 }
             }
             return {
-                data: userSchemaWithTokens.parse({
+                data: UserSchemaWithTokens.parse({
                     user: {
                         id: user.id,
                         email: user.email,
@@ -61,7 +61,7 @@ export class AuthService implements IAuthService {
             }
         }
     }
-    async signup(requestData: signUpRequest): Promise<ServiceResult<UserWithToken>> {
+    async signup(requestData: SignUpRequest): Promise<ServiceResult<UserWithToken>> {
         try {
             const { email, userName, password } = requestData;
             const existingUser = await prismaClient.user.findUnique({
@@ -106,7 +106,7 @@ export class AuthService implements IAuthService {
                 }
             }
             return {
-                data: userSchemaWithTokens.parse({
+                data: UserSchemaWithTokens.parse({
                     user: {
                         id: user.id,
                         email: user.email,
