@@ -7,10 +7,14 @@ import {
 import { ServiceResult } from "../domain/interfaces"
 
 export interface IAccountService {
-  getMyBankAccounts(userId: string): Promise<ServiceResult<BankAccounts>>
   getAllAccountTypes(): Promise<ServiceResult<AccountTypes>>
   createBankAccount(
     userId: string,
     data: CreateBankAccountRequest
+  ): Promise<ServiceResult<BankAccount>>
+  getMyBankAccounts(userId: string): Promise<ServiceResult<BankAccounts>>
+  getBankAccountById(
+    id: string,
+    userId: string
   ): Promise<ServiceResult<BankAccount>>
 }

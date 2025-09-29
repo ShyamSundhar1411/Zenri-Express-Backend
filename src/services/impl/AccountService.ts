@@ -11,37 +11,6 @@ import { ServiceResult } from "../../domain/interfaces"
 import { IAccountService } from "../IAccountService"
 
 export class AccountService implements IAccountService {
-  async getMyBankAccounts(
-    userId: string
-  ): Promise<ServiceResult<BankAccounts>> {
-    try {
-      const bankAccounts = await prismaClient.bankAccount.findMany({
-        where: {
-          userId: userId
-        },
-        include: {
-          accountType: true
-        }
-      })
-      if (!bankAccounts || bankAccounts.length == 0) {
-        return {
-          error: "No bank accounts found",
-          statusCode: 400
-        }
-      }
-      return {
-        data: bankAccounts.map((bankAccount) => {
-          return BankAccountSchema.parse(bankAccount)
-        }),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
-        statusCode: 400
-      }
-    }
-  }
   async getAllAccountTypes(): Promise<ServiceResult<AccountTypes>> {
     try {
       const accountTypes = await prismaClient.accountType.findMany()
@@ -106,6 +75,68 @@ export class AccountService implements IAccountService {
       return {
         error: error.message || "Internal error",
         statusCode: 500
+      }
+    }
+  }
+  async getMyBankAccounts(
+    userId: string
+  ): Promise<ServiceResult<BankAccounts>> {
+    try {
+      const bankAccounts = await prismaClient.bankAccount.findMany({
+        where: {
+          userId: userId
+        },
+        include: {
+          accountType: true
+        }
+      })
+      if (!bankAccounts || bankAccounts.length == 0) {
+        return {
+          error: "No bank accounts found",
+          statusCode: 400
+        }
+      }
+      return {
+        data: bankAccounts.map((bankAccount) => {
+          return BankAccountSchema.parse(bankAccount)
+        }),
+        statusCode: 200
+      }
+    } catch (error: any) {
+      return {
+        error: error,
+        statusCode: 400
+      }
+    }
+  }
+  async getBankAccountById(
+    id: string,
+    userId: string
+  ): Promise<ServiceResult<BankAccount>> {
+    try {
+      const bankAccount = await prismaClient.bankAccount.findFirst({
+        where: {
+          id: id,
+          userId: userId
+        },
+        include: {
+          accountType: true
+        }
+      })
+      if (!bankAccount) {
+        return {
+          error: "Bank account not found",
+          statusCode: 404
+        }
+      }
+      return {
+        data: BankAccountSchema.parse(bankAccount),
+        statusCode: 200
+      }
+    } catch (error: any) {
+      return {
+        error: error,
+        statusCode: 400
       }
     }
   }

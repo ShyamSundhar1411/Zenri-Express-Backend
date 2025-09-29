@@ -18,10 +18,7 @@ export const getAllAccountTypes: RequestHandler = asyncHandler(
 
 export const getMyBankAccounts: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const userId = req.userId
-    if (!userId) {
-      return res.status(401).json({ error: "Unauthorized" })
-    }
+    const userId = req.userId!
     const result = await accountService.getMyBankAccounts(userId)
     return res.status(result.statusCode).json(result)
   }
@@ -32,11 +29,17 @@ export const createBankAccount: RequestHandler<
   {},
   CreateBankAccountRequest
 > = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const userId = req.userId
-  if (!userId) {
-    return res.status(401).json({ error: "Unauthorized" })
-  }
+  const userId = req.userId!
   const parsedData = CreateBankAccountSchema.parse(req.body)
   const result = await accountService.createBankAccount(userId, parsedData)
   return res.status(result.statusCode).json(result)
 })
+
+export const getBankAccountById: RequestHandler = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const userId = req.userId!
+    const id = req.params.id!
+    const result = await accountService.getBankAccountById(id, userId)
+    return res.status(result.statusCode).json(result)
+  }
+)

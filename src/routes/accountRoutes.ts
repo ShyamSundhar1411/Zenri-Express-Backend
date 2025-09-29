@@ -2,6 +2,7 @@ import { Router } from "express"
 import {
   createBankAccount,
   getAllAccountTypes,
+  getBankAccountById,
   getMyBankAccounts
 } from "../controllers/accountController"
 import { AuthMiddleware } from "../middlewares/authMiddleware"
@@ -28,7 +29,7 @@ const authMiddleware = new AuthMiddleware()
 accountRouter.get("/account-types", getAllAccountTypes)
 /**
  * @swagger
- * /api/v1/accounts/my-bank-accounts:
+ * /api/v1/accounts/bank-accounts:
  *   get:
  *     summary: Get all bank accounts for the authenticated user
  *     tags:
@@ -48,14 +49,14 @@ accountRouter.get("/account-types", getAllAccountTypes)
  *         description: Unauthorized - Invalid or missing token
  */
 accountRouter.get(
-  "/my-bank-accounts",
+  "/bank-accounts",
   authMiddleware.authRequired,
   getMyBankAccounts
 )
 
 /**
  * @swagger
- * /api/v1/accounts/create-bank-account:
+ * /api/v1/accounts/bank-accounts:
  *   post:
  *     summary: Create a new bank account for the authenticated user
  *     tags:
@@ -82,8 +83,46 @@ accountRouter.get(
  */
 
 accountRouter.post(
-  "/create-bank-account",
+  "/bank-accounts",
   authMiddleware.authRequired,
   createBankAccount
+)
+
+/**
+ * @swagger
+ * /api/v1/accounts/bank-accounts/{id}:
+ *   get:
+ *     summary: Get a bank account by ID for the authenticated user
+ *     tags:
+ *       - Accounts
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Bank account ID
+ *     responses:
+ *       200:
+ *         description: Bank account object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/BankAccount"
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *       403:
+ *         description: Forbidden - Bank account does not belong to the user
+ *       404:
+ *         description: Bank account not found
+ *       500:
+ *         description: Internal server error
+ */
+accountRouter.get(
+  "/bank-accounts/:id",
+  authMiddleware.authRequired,
+  getBankAccountById
 )
 export default accountRouter
