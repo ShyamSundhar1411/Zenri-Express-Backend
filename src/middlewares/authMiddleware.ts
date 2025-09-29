@@ -2,7 +2,8 @@ import { AuthRequest } from "../domain/interfaces"
 import { Response, NextFunction } from "express"
 import { supabase, supabaseJWTEncodedSecretKey } from "../config/supabase"
 import prismaClient from "../config/prismaClient"
-import { jwtVerify } from "jose"
+import { jwtVerify, errors as JoseErrors } from "jose"
+
 export class AuthMiddleware {
   authRequired = async (
     req: AuthRequest,
@@ -14,18 +15,28 @@ export class AuthMiddleware {
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" })
       }
-      const { payload } = await jwtVerify(token, supabaseJWTEncodedSecretKey)
+
+      let payload
+      try {
+        const result = await jwtVerify(token, supabaseJWTEncodedSecretKey)
+        payload = result.payload
+      } catch (err: any) {
+        if (err instanceof JoseErrors.JWTExpired) {
+          return res.status(401).json({ error: "Token expired" })
+        }
+        return res.status(401).json({ error: "Invalid token" })
+      }
+
       const userId = payload.sub as string
       const prismaUser = await prismaClient.user.findFirst({
-        where: {
-          supabaseUserId: userId
-        }
+        where: { supabaseUserId: userId }
       })
       if (!prismaUser) {
         return res
           .status(403)
           .json({ error: "User not registered in app database" })
       }
+
       req.userId = prismaUser.id
       next()
     } catch (error) {

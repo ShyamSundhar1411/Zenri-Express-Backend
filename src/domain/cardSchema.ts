@@ -26,7 +26,12 @@ export const DebitCardSchema = z.object({
   updatedAt: z.coerce.date()
 })
 
+export const CardSchema = z.object({
+  creditCards: z.array(CreditCardSchema),
+  debitCards: z.array(DebitCardSchema)
+})
 export type CreditCard = z.infer<typeof CreditCardSchema>
 export type CreditCards = z.infer<(typeof CreditCardSchema)[]>
 export type DebitCard = z.infer<typeof DebitCardSchema>
 export type DebitCards = z.infer<(typeof DebitCardSchema)[]>
+export type Card = z.infer<typeof CardSchema>

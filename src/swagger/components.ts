@@ -22,7 +22,6 @@
  *         password:
  *           type: string
  *           example: "P@ssw0rd"
- *
  *     LoginRequest:
  *       type: object
  *       required:
@@ -36,7 +35,6 @@
  *         password:
  *           type: string
  *           example: "P@ssw0rd"
- *
  *     User:
  *       type: object
  *       properties:
@@ -56,7 +54,6 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
- *
  *     Tokens:
  *       type: object
  *       properties:
@@ -64,7 +61,6 @@
  *           type: string
  *         refreshToken:
  *           type: string
- *
  *     SignupResponse:
  *       type: object
  *       properties:
@@ -72,7 +68,6 @@
  *           $ref: "#/components/schemas/User"
  *         tokens:
  *           $ref: "#/components/schemas/Tokens"
- *
  *     LoginResponse:
  *       type: object
  *       properties:
@@ -99,7 +94,6 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
- *
  *     GetAllAccountTypesResponse:
  *       type: object
  *       properties:
@@ -143,7 +137,6 @@
  *           type: string
  *           format: date-time
  *           example: "2025-09-29T12:34:56Z"
- *
  *     GetMyBankAccountsResponse:
  *       type: object
  *       properties:
@@ -179,7 +172,6 @@
  *         balance:
  *           type: number
  *           example: 5000.75
- *
  *     CreateBankAccountResponse:
  *       type: object
  *       properties:
@@ -192,5 +184,103 @@
  *         statusCode:
  *           type: integer
  *           example: 201
+ *
+ *     # =====================
+ *     # Card Schemas
+ *     # =====================
+ *     CardStatus:
+ *       type: string
+ *       enum: [ACTIVE, BLOCKED, EXPIRED]
+ *
+ *     CreditCard:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "c1234567-89ab-cdef-0123-456789abcdef"
+ *         cardNumber:
+ *           type: string
+ *           example: "4111111111111111"
+ *         cardNetworkId:
+ *           type: string
+ *           example: "VISA"
+ *         issuer:
+ *           type: string
+ *           description: "Decimal value from Prisma"
+ *           example: "100.50"
+ *         balance:
+ *           type: number
+ *           example: 5000.75
+ *         expiresAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-12-31T23:59:59.000Z"
+ *         userId:
+ *           type: string
+ *           example: "user_12345"
+ *         status:
+ *           $ref: "#/components/schemas/CardStatus"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T07:37:13.218Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T07:37:13.218Z"
+ *
+ *     DebitCard:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "d1234567-89ab-cdef-0123-456789abcdef"
+ *         cardNumber:
+ *           type: string
+ *           example: "5123456789012345"
+ *         cardNetworkId:
+ *           type: string
+ *           example: "MASTERCARD"
+ *         bankAccountId:
+ *           type: string
+ *           example: "acc_12345"
+ *         expiresAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-12-31T23:59:59.000Z"
+ *         userId:
+ *           type: string
+ *           example: "user_12345"
+ *         status:
+ *           $ref: "#/components/schemas/CardStatus"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T07:37:13.218Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T07:37:13.218Z"
+ *
+ *     Card:
+ *       type: object
+ *       properties:
+ *         creditCards:
+ *           type: array
+ *           items:
+ *             $ref: "#/components/schemas/CreditCard"
+ *         debitCards:
+ *           type: array
+ *           items:
+ *             $ref: "#/components/schemas/DebitCard"
+ *
+ *     GetUserCardsResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Card"
+ *         statusCode:
+ *           type: integer
+ *           example: 200
  */
 export {}
