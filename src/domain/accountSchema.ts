@@ -10,14 +10,6 @@ export const AccountTypeSchema = z.object({
   updatedAt: z.coerce.date()
 })
 
-export const CardNetworkSchema = z.object({
-  id: z.string(),
-  networkName: z.string(),
-  isDisabled: z.boolean(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date()
-})
-
 export const AccountStatus = z.enum(["ACTIVE", "CLOSED", "FROZEN", "SUSPENDED"])
 export const BankAccountSchema = z.object({
   id: z.string(),

@@ -283,4 +283,92 @@
  *           type: integer
  *           example: 200
  */
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     # =====================
+ *     # Card Creation Schemas
+ *     # =====================
+ *     CreateDebitCardRequest:
+ *       type: object
+ *       required:
+ *         - cardNumber
+ *         - cardNetwork
+ *         - bankAccount
+ *         - expiresAt
+ *       properties:
+ *         cardNumber:
+ *           type: string
+ *           example: "5123456789012345"
+ *         cardNetwork:
+ *           type: string
+ *           example: "MASTERCARD"
+ *         bankAccount:
+ *           type: string
+ *           description: "Bank account ID to link the debit card"
+ *           example: "acc_12345"
+ *         expiresAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-12-31T23:59:59.000Z"
+ *
+ *     CreateCreditCardRequest:
+ *       type: object
+ *       required:
+ *         - cardNumber
+ *         - cardNetwork
+ *         - issuer
+ *         - limit
+ *         - balance
+ *         - expiresAt
+ *       properties:
+ *         cardNumber:
+ *           type: string
+ *           example: "4111111111111111"
+ *         cardNetwork:
+ *           type: string
+ *           example: "VISA"
+ *         issuer:
+ *           type: string
+ *           description: "Issuer of the credit card"
+ *           example: "Bank of America"
+ *         limit:
+ *           type: number
+ *           example: 10000
+ *         balance:
+ *           type: number
+ *           example: 5000.75
+ *         expiresAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-12-31T23:59:59.000Z"
+ */
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CardNetwork:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "net_123456"
+ *         networkName:
+ *           type: string
+ *           example: "VISA"
+ *         isDisabled:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T12:34:56Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T12:34:56Z"
+ */
+
 export {}

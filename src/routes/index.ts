@@ -7,5 +7,5 @@ const zenriRouter: Router = Router()
 
 zenriRouter.use("/auth", authRouter)
 zenriRouter.use("/accounts", accountRouter)
-zenriRouter.use("/cards",cardRouter)
+zenriRouter.use("/cards", cardRouter)
 export default zenriRouter

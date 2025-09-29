@@ -63,7 +63,7 @@ export class AccountService implements IAccountService {
       })
       return {
         data: BankAccountSchema.parse(bankAccount),
-        statusCode: 200
+        statusCode: 201
       }
     } catch (error: any) {
       if (error.code === "P2002") {
