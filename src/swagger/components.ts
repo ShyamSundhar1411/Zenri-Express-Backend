@@ -22,7 +22,7 @@
  *         password:
  *           type: string
  *           example: "P@ssw0rd"
- * 
+ *
  *     LoginRequest:
  *       type: object
  *       required:
@@ -36,7 +36,7 @@
  *         password:
  *           type: string
  *           example: "P@ssw0rd"
- * 
+ *
  *     User:
  *       type: object
  *       properties:
@@ -56,7 +56,7 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
- * 
+ *
  *     Tokens:
  *       type: object
  *       properties:
@@ -64,7 +64,7 @@
  *           type: string
  *         refreshToken:
  *           type: string
- * 
+ *
  *     SignupResponse:
  *       type: object
  *       properties:
@@ -72,7 +72,7 @@
  *           $ref: "#/components/schemas/User"
  *         tokens:
  *           $ref: "#/components/schemas/Tokens"
- * 
+ *
  *     LoginResponse:
  *       type: object
  *       properties:
@@ -80,7 +80,7 @@
  *           $ref: "#/components/schemas/User"
  *         tokens:
  *           $ref: "#/components/schemas/Tokens"
- * 
+ *
  *     # =====================
  *     # Account Type Schemas
  *     # =====================
@@ -99,7 +99,7 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
- * 
+ *
  *     GetAllAccountTypesResponse:
  *       type: object
  *       properties:
@@ -107,6 +107,90 @@
  *           type: array
  *           items:
  *             $ref: "#/components/schemas/AccountType"
+ *
+ *     # =====================
+ *     # Bank Account Schemas
+ *     # =====================
+ *     BankAccount:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "acc_12345"
+ *         accountNumber:
+ *           type: string
+ *           example: "123456789012"
+ *         accountType:
+ *           $ref: "#/components/schemas/AccountType"
+ *         bankName:
+ *           type: string
+ *           example: "Chase Bank"
+ *         balance:
+ *           type: number
+ *           example: 2500.75
+ *         userId:
+ *           type: string
+ *           example: "user_12345"
+ *         status:
+ *           type: string
+ *           enum: [ACTIVE, INACTIVE, CLOSED]
+ *           default: ACTIVE
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T12:34:56Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T12:34:56Z"
+ *
+ *     GetMyBankAccountsResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           type: array
+ *           items:
+ *             $ref: "#/components/schemas/BankAccount"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ *     CreateBankAccountRequest:
+ *       type: object
+ *       required:
+ *         - accountNumber
+ *         - accountType
+ *         - bankName
+ *         - balance
+ *       properties:
+ *         accountNumber:
+ *           type: string
+ *           example: "1234567890"
+ *         accountType:
+ *           type: string
+ *           description: "Account type name (e.g., SAVINGS, CHECKING)"
+ *           example: "SAVINGS"
+ *         bankName:
+ *           type: string
+ *           example: "Chase Bank"
+ *         balance:
+ *           type: number
+ *           example: 5000.75
+ *
+ *     CreateBankAccountResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/BankAccount"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 201
  */
-
-export {}; // Empty export to make this a module
+export {}

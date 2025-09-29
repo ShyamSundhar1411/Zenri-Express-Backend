@@ -1,6 +1,6 @@
-import { json, RequestHandler, urlencoded} from "express";
+import { json, RequestHandler, urlencoded } from "express"
 
 export const jsonParser: RequestHandler[] = [
-    json(),
-    urlencoded({extended: true})
+  json(),
+  urlencoded({ extended: true })
 ]

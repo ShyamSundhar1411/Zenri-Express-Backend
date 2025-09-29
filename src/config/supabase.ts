@@ -1,17 +1,22 @@
-import { createClient } from "@supabase/supabase-js";
-import dotenv from "dotenv";
+import { createClient } from "@supabase/supabase-js"
+import dotenv from "dotenv"
 dotenv.config()
-const supabaseUrl = process.env.SUPABASE_PROJECT_URL || "https://test.supabase.co";
+const supabaseUrl =
+  process.env.SUPABASE_PROJECT_URL || "https://test.supabase.co"
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "my-secret-key"
-console.log(supabaseUrl, supabaseAnonKey)
+const supabaseJWTSecretKey = process.env.SUPABASE_JWT_SECRET_KEY
+console.log(supabaseUrl, supabaseAnonKey, supabaseJWTSecretKey)
 
-if (!supabaseUrl) console.warn('⚠️ SUPABASE_PROJECT_URL is not set!');
-if (!supabaseAnonKey) console.warn('⚠️ SUPABASE_ANON_ROLE_KEY is not set!');
+if (!supabaseUrl) console.warn("⚠️ SUPABASE_PROJECT_URL is not set!")
+if (!supabaseAnonKey) console.warn("⚠️ SUPABASE_ANON_ROLE_KEY is not set!")
 
-console.log('Initializing Supabase client...');
-console.log(`Supabase URL: ${supabaseUrl}`);
-console.log(`Supabase Key is set: ${supabaseAnonKey ? '✅' : '❌'}`);
+console.log("Initializing Supabase client...")
+console.log(`Supabase URL: ${supabaseUrl}`)
+console.log(`Supabase Key is set: ${supabaseAnonKey ? "✅" : "❌"}`)
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabaseJWTEncodedSecretKey = new TextEncoder().encode(
+  supabaseJWTSecretKey
+)
 
-console.log('Supabase client initialized successfully');
+console.log("Supabase client initialized successfully")

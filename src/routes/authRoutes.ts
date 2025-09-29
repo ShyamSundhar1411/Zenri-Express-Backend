@@ -1,6 +1,5 @@
-import { Router } from "express";
-import { signup, login } from "../controllers/authController";
-
+import { Router } from "express"
+import { signup, login } from "../controllers/authController"
 
 const authRouter: Router = Router()
 /**
@@ -24,8 +23,7 @@ const authRouter: Router = Router()
  *             schema:
  *               $ref: "#/components/schemas/SignupResponse"
  */
-authRouter.post("/signup",signup);
-
+authRouter.post("/signup", signup)
 
 /**
  * @swagger
@@ -52,6 +50,6 @@ authRouter.post("/signup",signup);
  *       401:
  *         description: Invalid credentials
  */
-authRouter.post("/login", login);
+authRouter.post("/login", login)
 
-export default authRouter;
+export default authRouter
