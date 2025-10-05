@@ -5,33 +5,35 @@ enum CardStatus {
 }
 
 model CreditCard {
-    id         String      @id @default(uuid())
-    cardNumber String      @unique @db.VarChar(19)
-    cardNetwork    CardNetwork @relation(fields: [cardNetworkId], references: [id])
+    id             String          @id @default(uuid())
+    cardNumber     String          @unique @db.VarChar(19)
+    cardNetwork    CardNetwork     @relation(fields: [cardNetworkId], references: [id])
     cardNetworkId  String
-    issuer     String
-    limit      Decimal
-    balance    Decimal     @default(0)
-    expiresAt  DateTime
+    issuer         String
+    limit          Decimal
+    balance        Decimal         @default(0)
+    expiresAt      DateTime
+    paymentMethods PaymentMethod[]
+    userId         String
+    user           User            @relation(fields: [userId], references: [id])
+    status         CardStatus      @default(ACTIVE)
 
-    userId    String
-    user      User       @relation(fields: [userId], references: [id])
-    status    CardStatus @default(ACTIVE)
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     @@index([userId])
 }
 
 model DebitCard {
-    id            String      @id @default(uuid())
-    cardNumber    String      @unique @db.VarChar(19)
-    cardNetwork       CardNetwork @relation(fields: [cardNetworkId], references: [id])
-    cardNetworkId     String
-    bankAccountId String
-    bankAccount   BankAccount @relation(fields: [bankAccountId], references: [id])
-    expiresAt     DateTime
-    status        CardStatus  @default(ACTIVE)
-    createdAt     DateTime    @default(now())
-    updatedAt     DateTime    @updatedAt
+    id             String          @id @default(uuid())
+    cardNumber     String          @unique @db.VarChar(19)
+    cardNetwork    CardNetwork     @relation(fields: [cardNetworkId], references: [id])
+    cardNetworkId  String
+    paymentMethods PaymentMethod[]
+    bankAccountId  String
+    bankAccount    BankAccount     @relation(fields: [bankAccountId], references: [id])
+    expiresAt      DateTime
+    status         CardStatus      @default(ACTIVE)
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
 }

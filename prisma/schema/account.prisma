@@ -27,20 +27,20 @@ enum AccountStatus {
 }
 
 model BankAccount {
-    id            String        @id @default(uuid())
-    accountNumber String        @unique @db.VarChar(20)
-    accountType   AccountType   @relation(fields: [accountTypeId], references: [id])
-    accountTypeId String
-    bankName      String
-    balance       Decimal       @default(0.0)
-    user          User          @relation(fields: [userId], references: [id])
-    userId        String
-    debitCards    DebitCard[]
-    status        AccountStatus @default(ACTIVE)
-    createdAt     DateTime      @default(now())
-    updatedAt     DateTime      @updatedAt
+    id             String          @id @default(uuid())
+    accountNumber  String          @unique @db.VarChar(20)
+    accountType    AccountType     @relation(fields: [accountTypeId], references: [id])
+    accountTypeId  String
+    bankName       String
+    balance        Decimal         @default(0.0)
+    user           User            @relation(fields: [userId], references: [id])
+    userId         String
+    debitCards     DebitCard[]
+    paymentMethods PaymentMethod[]
+    status         AccountStatus   @default(ACTIVE)
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
 
     @@unique([accountNumber, bankName])
     @@index([userId])
 }
-

@@ -1,11 +1,16 @@
 model User {
-    id           String        @id @default(uuid())
-    userName     String        @unique
-    email        String        @unique
-    supabaseUserId  String?    
-    bankAccounts BankAccount[]
-    creditCards  CreditCard[]
-    isDisabled   Boolean       @default(false)
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @updatedAt
+    id             String          @id @default(uuid())
+    userName       String          @unique
+    email          String          @unique
+    supabaseUserId String?
+    bankAccounts   BankAccount[]
+    creditCards    CreditCard[]
+    categories     Category[]
+    ledgers        Ledger[]
+    budgets        Budget[]
+    transactions   Transaction[]
+    paymentMethods PaymentMethod[]
+    isDisabled     Boolean         @default(false)
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
 }

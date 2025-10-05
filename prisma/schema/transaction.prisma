@@ -1,0 +1,105 @@
+model Ledger {
+    id           String        @id @default(uuid())
+    month        String
+    year         String
+    user         User          @relation(fields: [userId], references: [id])
+    userId       String
+    budgets      Budget[]
+    transactions Transaction[]
+    isDeleted    Boolean       @default(false)
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+
+    @@unique([month, year, userId])
+    @@index([userId, month, year])
+}
+
+enum CategoryType {
+    SYSTEM
+    CUSTOM
+}
+
+model Category {
+    id           String        @id @default(uuid())
+    categoryName String
+    categoryType CategoryType  @default(SYSTEM)
+    userId       String?
+    user         User?         @relation(fields: [userId], references: [id])
+    transactions Transaction[]
+    isDeleted    Boolean       @default(false)
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+}
+
+enum TransactionType {
+    CREDIT
+    DEBIT
+}
+
+model Budget {
+    id           String  @id @default(uuid())
+    amount       Decimal
+    currencyCode String
+    ledgerId     String
+
+    ledger    Ledger   @relation(fields: [ledgerId], references: [id])
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+    isDeleted Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model PaymentMethodType {
+    id                    String          @id @default(uuid())
+    paymentMethodTypeName String          @unique
+    paymentMethods        PaymentMethod[]
+    isDisabled            Boolean         @default(false)
+    createdAt             DateTime        @default(now())
+    updatedAt             DateTime        @updatedAt
+}
+
+model PaymentMethod {
+    id                  String            @id @default(uuid())
+    paymentMethodTypeId String
+    paymentMethodType   PaymentMethodType @relation(fields: [paymentMethodTypeId], references: [id])
+    creditCardId        String?
+    debitCardId         String?
+    bankAccountId       String?
+    creditCard          CreditCard?       @relation(fields: [creditCardId], references: [id])
+    debitCard           DebitCard?        @relation(fields: [debitCardId], references: [id])
+    bankAccount         BankAccount?      @relation(fields: [bankAccountId], references: [id])
+    providerName        String?
+    externalHandle      String?
+    notes               String?
+    userId              String
+    user                User              @relation(fields: [userId], references: [id])
+    transactions        Transaction[]
+    isDefault           Boolean           @default(false)
+    isDeleted           Boolean           @default(false)
+    createdAt           DateTime          @default(now())
+    updatedAt           DateTime          @updatedAt
+}
+
+model Transaction {
+    id              String          @id @default(uuid())
+    amount          Decimal
+    currencyCode    String
+    transactionType TransactionType
+    categoryId      String
+    category        Category        @relation(fields: [categoryId], references: [id])
+    ledgerId        String
+    ledger          Ledger          @relation(fields: [ledgerId], references: [id])
+    userId          String
+    user            User            @relation(fields: [userId], references: [id])
+
+    paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+    paymentMethodId String?
+    description     String?
+    transactedOn    DateTime
+    isDeleted       Boolean        @default(false)
+    createdAt       DateTime       @default(now())
+    updatedAt       DateTime       @updatedAt
+
+    @@index([userId, ledgerId, transactedOn])
+}
