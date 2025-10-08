@@ -371,4 +371,152 @@
  *           example: "2025-09-29T12:34:56Z"
  */
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     # =====================
+ *     # Category Schemas
+ *     # =====================
+ *     CategoryType:
+ *       type: string
+ *       description: "Specifies whether the category is system-defined or user-defined."
+ *       enum: [SYSTEM, CUSTOM]
+ *       example: SYSTEM
+ *
+ *     Category:
+ *       type: object
+ *       title: Category
+ *       description: "Represents a category entity."
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "cat_12345"
+ *         categoryName:
+ *           type: string
+ *           example: "Groceries"
+ *         categoryType:
+ *           $ref: "#/components/schemas/CategoryType"
+ *           description: "Type of category, defaults to SYSTEM."
+ *         userId:
+ *           type: string
+ *           nullable: true
+ *           example: "usr_67890"
+ *           description: "User ID associated with the category (null if system category)."
+ *         isDeleted:
+ *           type: boolean
+ *           example: false
+ *           description: "Indicates whether the category is soft-deleted."
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-08T12:34:56Z"
+ *           description: "Timestamp when the category was created."
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-08T12:34:56Z"
+ *           description: "Timestamp when the category was last updated."
+ *       required:
+ *         - id
+ *         - categoryName
+ *         - categoryType
+ *         - isDeleted
+ *         - createdAt
+ *         - updatedAt
+ *
+ *     Categories:
+ *       type: array
+ *       title: Categories
+ *       description: "List of Category objects."
+ *       items:
+ *         $ref: "#/components/schemas/Category"
+ *
+ *     GetMyCategoriesResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Categories"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ */
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     # =====================
+ *     # Ledger Schemas
+ *     # =====================
+ *     Ledger:
+ *       type: object
+ *       title: Ledger
+ *       description: "Represents a user's financial ledger entry."
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "led_12345"
+ *           description: "Unique identifier for the ledger."
+ *         month:
+ *           type: string
+ *           example: "September"
+ *           description: "The month this ledger entry represents."
+ *         year:
+ *           type: string
+ *           example: "2025"
+ *           description: "The year this ledger entry represents."
+ *         userId:
+ *           type: string
+ *           example: "usr_67890"
+ *           description: "ID of the user who owns this ledger."
+ *         isDeleted:
+ *           type: boolean
+ *           example: false
+ *           description: "Indicates whether this ledger entry has been soft-deleted."
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-08T12:34:56Z"
+ *           description: "Timestamp when the ledger was created."
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-08T12:34:56Z"
+ *           description: "Timestamp when the ledger was last updated."
+ *       required:
+ *         - id
+ *         - month
+ *         - year
+ *         - userId
+ *         - isDeleted
+ *         - createdAt
+ *         - updatedAt
+ *
+ *     Ledgers:
+ *       type: array
+ *       title: Ledgers
+ *       description: "List of ledger entries."
+ *       items:
+ *         $ref: "#/components/schemas/Ledger"
+ *
+ *     GetMyLedgersResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Ledgers"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ */
+
 export {}
+
