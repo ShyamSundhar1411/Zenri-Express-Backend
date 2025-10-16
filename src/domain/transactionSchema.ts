@@ -20,5 +20,16 @@ export const TransactionSchema = z.object({
     updatedAt: z.coerce.date()
 
 })
+
+export const TransactionCreateRequestSchema = z.object({
+    amount: z.instanceof(Prisma.Decimal),
+    currencyCode: z.string(),
+    transactionType: TransactionType.default("DEBIT"),
+    paymentMethodId: z.string(),
+    categoryId: z.string(),
+    description: z.string().nullable(),
+    transactedOn: z.coerce.date().default(new Date()),
+})
 export type Transaction = z.infer<typeof TransactionSchema>
 export type Transactions = z.infer<typeof TransactionSchema[]>
+export type TransactionCreateRequest = z.infer<typeof TransactionCreateRequestSchema>

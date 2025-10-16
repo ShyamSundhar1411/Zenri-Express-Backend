@@ -10,5 +10,6 @@ export const LedgerSchema = z.object({
     updatedAt: z.coerce.date()
 })
 
+
 export type Ledger = z.infer<typeof LedgerSchema>
 export type Ledgers = z.infer<typeof LedgerSchema[]>
