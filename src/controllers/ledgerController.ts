@@ -12,3 +12,19 @@ export const getMyLedgers: RequestHandler = asyncHandler(
         return res.status(result.statusCode).json(result)
     }
 )
+
+export const getLedgerById: RequestHandler = asyncHandler(
+    async (req:AuthRequest,res:Response) => {
+        const userId = req.userId!!;
+        const ledgerID = req.params.ledgerId;
+        const result = await ledgerService.getLedgerById(userId,ledgerID);
+        return res.status(result.statusCode).json(result)
+    }
+)
+export const createLedger: RequestHandler = asyncHandler(
+    async (req:AuthRequest, res:Response) => {
+        const userId = req.userId!!;
+        const result = await ledgerService.createLedger(userId);
+        return res.status(result.statusCode).json(result)
+    }
+)

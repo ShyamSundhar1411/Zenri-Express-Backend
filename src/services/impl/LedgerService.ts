@@ -5,6 +5,26 @@ import { ILedgerService } from "../ILedgerService";
 
 
 export class LedgerService implements ILedgerService {
+    async getLedgerById(userId: string, ledgerId: string): Promise<ServiceResult<Ledger>> {
+        try{
+            const ledger = await prismaClient.ledger.findUnique({
+                where:{
+                    userId:userId,
+                    id: ledgerId
+                }
+            })
+            return {
+                data: LedgerSchema.parse(ledger),
+                statusCode:200,
+            }
+        }catch(error:any){
+            return {
+                error: error.message||error,
+                statusCode: 400
+            }
+        }
+    }
+    
     
     async getMyLedgers(userId: string): Promise<ServiceResult<Ledgers>> {
         try {
