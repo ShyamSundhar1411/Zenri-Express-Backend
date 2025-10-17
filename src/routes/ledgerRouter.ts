@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuthMiddleware } from "../middlewares/authMiddleware";
-import { getMyLedgers } from "../controllers/ledgerController";
+import { createLedger, getMyLedgers } from "../controllers/ledgerController";
 
 
 const ledgerRouter: Router = Router()
@@ -50,4 +50,5 @@ const authMiddlware = new AuthMiddleware()
  */
 ledgerRouter.get('/my-ledgers', authMiddlware.authRequired,getMyLedgers)
 
+ledgerRouter.post("/",authMiddlware.authRequired,createLedger)
 export default ledgerRouter;
