@@ -588,5 +588,159 @@
  *           type: integer
  *           example: 200
  */
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     # =====================
+ *     # Transaction Schemas
+ *     # =====================
+ *     TransactionType:
+ *       type: string
+ *       enum: [CREDIT, DEBIT]
+ *       example: DEBIT
+ *
+ *     Transaction:
+ *       type: object
+ *       title: Transaction
+ *       description: "Represents a financial transaction entry."
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "txn_12345"
+ *         amount:
+ *           type: string
+ *           example: "1500.75"
+ *           description: "Decimal amount of the transaction."
+ *         currencyCode:
+ *           type: string
+ *           example: "USD"
+ *         transactionType:
+ *           $ref: "#/components/schemas/TransactionType"
+ *         categoryId:
+ *           type: string
+ *           example: "cat_98765"
+ *         ledgerId:
+ *           type: string
+ *           example: "led_54321"
+ *         userId:
+ *           type: string
+ *           example: "usr_67890"
+ *         paymentMethodId:
+ *           type: string
+ *           nullable: true
+ *           example: "pm_11111"
+ *         description:
+ *           type: string
+ *           nullable: true
+ *           example: "Salary Credit for October"
+ *         transactedOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-01T12:00:00Z"
+ *         isDeleted:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-18T12:34:56Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-18T12:34:56Z"
+ *       required:
+ *         - id
+ *         - amount
+ *         - currencyCode
+ *         - transactionType
+ *         - categoryId
+ *         - ledgerId
+ *         - userId
+ *         - isDeleted
+ *         - createdAt
+ *         - updatedAt
+ *
+ *     Transactions:
+ *       type: array
+ *       title: Transactions
+ *       description: "List of transaction entries."
+ *       items:
+ *         $ref: "#/components/schemas/Transaction"
+ *
+ *     TransactionCreateRequest:
+ *       type: object
+ *       title: TransactionCreateRequest
+ *       description: "Payload to create a new transaction."
+ *       required:
+ *         - amount
+ *         - currencyCode
+ *         - transactionType
+ *         - categoryId
+ *         - paymentMethodId
+ *       properties:
+ *         amount:
+ *           type: string
+ *           example: "1200.50"
+ *         currencyCode:
+ *           type: string
+ *           example: "USD"
+ *         transactionType:
+ *           $ref: "#/components/schemas/TransactionType"
+ *         paymentMethodId:
+ *           type: string
+ *           example: "pm_11111"
+ *         categoryId:
+ *           type: string
+ *           example: "cat_98765"
+ *         description:
+ *           type: string
+ *           nullable: true
+ *           example: "Freelance payment"
+ *         transactedOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-07-15T10:00:00Z"
+ *
+ *     CreateTransactionResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Transaction"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 201
+ *
+ *     GetMyTransactionsResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Transactions"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ *
+ *     GetTransactionByIdResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Transaction"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ */
+
 export {}
 

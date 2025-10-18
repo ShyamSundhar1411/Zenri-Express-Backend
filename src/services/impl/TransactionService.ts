@@ -4,11 +4,12 @@ import { Transactions, TransactionCreateRequest, Transaction, TransactionSchema 
 import { ITransactionService } from "../ITransactionService";
 
 export class TransactionService implements ITransactionService {
-    async getTransactionById(transactionId: string): Promise<ServiceResult<Transaction>> {
+    async getTransactionById(userId:string,transactionId: string): Promise<ServiceResult<Transaction>> {
         try {
             const transaction = await prismaClient.transaction.findUnique({
                 where: {
-                    id: transactionId
+                    id: transactionId,
+                    userId: userId
                 }
             })
             return {
