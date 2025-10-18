@@ -50,5 +50,38 @@ const authMiddlware = new AuthMiddleware()
  */
 ledgerRouter.get('/my-ledgers', authMiddlware.authRequired,getMyLedgers)
 
-ledgerRouter.post("/",authMiddlware.authRequired,createLedger)
+/**
+ * @swagger
+ * /api/v1/ledger:
+ *   post:
+ *     summary: Create a ledger
+ *     tags:
+ *       - Ledger
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully created Ledger
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CreateLedgersResponse'
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 401
+ */
+
+ledgerRouter.post("/", authMiddlware.authRequired, createLedger)
 export default ledgerRouter;

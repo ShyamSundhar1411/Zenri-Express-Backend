@@ -516,6 +516,18 @@
  *         statusCode:
  *           type: integer
  *           example: 200
+ *     CreateLedgerResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Ledger"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
  */
 
 export {}
