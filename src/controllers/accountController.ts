@@ -25,8 +25,8 @@ export const getMyBankAccounts: RequestHandler = asyncHandler(
 )
 
 export const createBankAccount: RequestHandler<
-  {},
-  {},
+  Record<any, any>,
+  any,
   CreateBankAccountRequest
 > = asyncHandler(async (req: AuthRequest, res: Response) => {
   const userId = req.userId!

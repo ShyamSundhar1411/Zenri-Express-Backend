@@ -1,5 +1,4 @@
 import { z } from "zod"
-import { UserSchema } from "./userSchema"
 import { Prisma } from "../generated"
 
 export const AccountTypeSchema = z.object({

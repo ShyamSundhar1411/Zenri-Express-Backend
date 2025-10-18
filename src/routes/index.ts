@@ -13,5 +13,5 @@ zenriRouter.use("/accounts", accountRouter)
 zenriRouter.use("/cards", cardRouter)
 zenriRouter.use("/categories", categoryRouter)
 zenriRouter.use("/ledger", ledgerRouter)
-zenriRouter.use("/transactions",transactionRouter)
+zenriRouter.use("/transactions", transactionRouter)
 export default zenriRouter

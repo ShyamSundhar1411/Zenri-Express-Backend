@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { AuthMiddleware } from "../middlewares/authMiddleware";
-import { getAllCategories } from "../controllers/categoryController";
+import { Router } from "express"
+import { AuthMiddleware } from "../middlewares/authMiddleware"
+import { getAllCategories } from "../controllers/categoryController"
 
-const categoryRouter: Router = Router();
-const authMiddleware = new AuthMiddleware();
+const categoryRouter: Router = Router()
+const authMiddleware = new AuthMiddleware()
 /**
  * @swagger
  * /api/v1/categories:
@@ -47,5 +47,5 @@ const authMiddleware = new AuthMiddleware();
  *                   type: integer
  *                   example: 500
  */
-categoryRouter.get("/",authMiddleware.authRequired,getAllCategories);
-export default categoryRouter;
+categoryRouter.get("/", authMiddleware.authRequired, getAllCategories)
+export default categoryRouter

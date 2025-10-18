@@ -1,6 +1,6 @@
 import { AuthRequest } from "../domain/interfaces"
 import { Response, NextFunction } from "express"
-import { supabase, supabaseJWTEncodedSecretKey } from "../config/supabase"
+import { supabaseJWTEncodedSecretKey } from "../config/supabase"
 import prismaClient from "../config/prismaClient"
 import { jwtVerify, errors as JoseErrors } from "jose"
 

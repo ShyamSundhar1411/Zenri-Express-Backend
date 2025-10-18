@@ -1,9 +1,13 @@
-import { Router } from "express";
-import { AuthMiddleware } from "../middlewares/authMiddleware";
-import { createTransaction, getMyTransactions, getTransactionById } from "../controllers/transactionController";
+import { Router } from "express"
+import { AuthMiddleware } from "../middlewares/authMiddleware"
+import {
+  createTransaction,
+  getMyTransactions,
+  getTransactionById
+} from "../controllers/transactionController"
 
-const transactionRouter: Router = Router();
-const authMiddleware = new AuthMiddleware();
+const transactionRouter: Router = Router()
+const authMiddleware = new AuthMiddleware()
 
 /**
  * @swagger
@@ -116,7 +120,11 @@ const authMiddleware = new AuthMiddleware();
  *                   type: integer
  *                   example: 401
  */
-transactionRouter.get("/my-transactions", authMiddleware.authRequired, getMyTransactions);
+transactionRouter.get(
+  "/my-transactions",
+  authMiddleware.authRequired,
+  getMyTransactions
+)
 
 /**
  * @swagger
@@ -146,7 +154,11 @@ transactionRouter.get("/my-transactions", authMiddleware.authRequired, getMyTran
  *       401:
  *         description: Unauthorized
  */
-transactionRouter.get("/my-transactions/:transactionId", authMiddleware.authRequired, getTransactionById);
+transactionRouter.get(
+  "/my-transactions/:transactionId",
+  authMiddleware.authRequired,
+  getTransactionById
+)
 
 /**
  * @swagger
@@ -175,6 +187,6 @@ transactionRouter.get("/my-transactions/:transactionId", authMiddleware.authRequ
  *       401:
  *         description: Unauthorized
  */
-transactionRouter.post("/", authMiddleware.authRequired, createTransaction);
+transactionRouter.post("/", authMiddleware.authRequired, createTransaction)
 
-export default transactionRouter;
+export default transactionRouter

@@ -25,22 +25,28 @@ export const getAllCardNetworks: RequestHandler = asyncHandler(
     return res.status(result.statusCode).json(result)
   }
 )
-export const createDebitCard: RequestHandler<{}, {}, CreateDebitCard> =
-  asyncHandler(async (req: AuthRequest, res: Response) => {
-    const userId = req.userId!
+export const createDebitCard: RequestHandler<
+  Record<string, never>,
+  any,
+  CreateDebitCard
+> = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const userId = req.userId!
 
-    const parsedData = CreateDebitCardSchema.parse(req.body)
-    const result = await cardService.createDebitCard(userId, parsedData)
-    return res.status(result.statusCode).json(result)
-  })
+  const parsedData = CreateDebitCardSchema.parse(req.body)
+  const result = await cardService.createDebitCard(userId, parsedData)
+  return res.status(result.statusCode).json(result)
+})
 
-export const createCreditCard: RequestHandler<{}, {}, CreateCreditCard> =
-  asyncHandler(async (req: AuthRequest, res: Response) => {
-    const userId = req.userId!
-    const parsedData = CreateCreditCardSchema.parse(req.body)
-    const result = await cardService.createCreditCard(userId, parsedData)
-    return res.status(result.statusCode).json(result)
-  })
+export const createCreditCard: RequestHandler<
+  Record<string, never>,
+  any,
+  CreateCreditCard
+> = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const userId = req.userId!
+  const parsedData = CreateCreditCardSchema.parse(req.body)
+  const result = await cardService.createCreditCard(userId, parsedData)
+  return res.status(result.statusCode).json(result)
+})
 
 export const getMyDebitCards: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {

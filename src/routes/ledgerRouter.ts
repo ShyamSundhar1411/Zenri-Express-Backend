@@ -1,7 +1,6 @@
-import { Router } from "express";
-import { AuthMiddleware } from "../middlewares/authMiddleware";
-import { createLedger, getMyLedgers } from "../controllers/ledgerController";
-
+import { Router } from "express"
+import { AuthMiddleware } from "../middlewares/authMiddleware"
+import { createLedger, getMyLedgers } from "../controllers/ledgerController"
 
 const ledgerRouter: Router = Router()
 const authMiddlware = new AuthMiddleware()
@@ -48,15 +47,15 @@ const authMiddlware = new AuthMiddleware()
  *                   type: integer
  *                   example: 500
  */
-ledgerRouter.get('/my-ledgers', authMiddlware.authRequired,getMyLedgers)
+ledgerRouter.get("/my-ledgers", authMiddlware.authRequired, getMyLedgers)
 /**
  * @openapi
  * /api/v1/ledger/:
  *   post:
  *     summary: Create a new ledger entry
  *     description: |
- *       Creates a ledger for the given user for a specific month and year.  
- *       If a ledger already exists for the provided month and year, the API returns a 400 error.  
+ *       Creates a ledger for the given user for a specific month and year.
+ *       If a ledger already exists for the provided month and year, the API returns a 400 error.
  *       If `month` and `year` are omitted, the system automatically uses the current month and year.
  *     tags:
  *       - Ledger
@@ -116,6 +115,6 @@ ledgerRouter.get('/my-ledgers', authMiddlware.authRequired,getMyLedgers)
  *                   example: 500
  *
  *
-*/
+ */
 ledgerRouter.post("/", authMiddlware.authRequired, createLedger)
-export default ledgerRouter;
+export default ledgerRouter

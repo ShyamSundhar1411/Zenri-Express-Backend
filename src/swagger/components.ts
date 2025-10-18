@@ -529,7 +529,7 @@
  *           type: integer
  *           example: 200
  */
-/** 
+/**
  * @openapi
  * components:
  *   schemas:
@@ -743,4 +743,3 @@
  */
 
 export {}
-
