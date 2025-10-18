@@ -5,9 +5,9 @@ import { ITransactionService } from "../ITransactionService";
 
 export class TransactionService implements ITransactionService {
     async getTransactionById(transactionId: string): Promise<ServiceResult<Transaction>> {
-        try{
+        try {
             const transaction = await prismaClient.transaction.findUnique({
-                where:{
+                where: {
                     id: transactionId
                 }
             })
@@ -15,7 +15,7 @@ export class TransactionService implements ITransactionService {
                 data: TransactionSchema.parse(transaction),
                 statusCode: 200
             }
-        }catch(error: any){
+        } catch (error: any) {
             return {
                 error: error.message || error,
                 statusCode: 400
@@ -42,19 +42,27 @@ export class TransactionService implements ITransactionService {
     }
     async createTransaction(userId: string, transactionData: TransactionCreateRequest): Promise<ServiceResult<Transaction>> {
         try {
-            const now = new Date();
-            const monthName = now.toLocaleString('default', { month: 'long' });
-            const year = now.getFullYear().toString();
+            const transactionDate = transactionData.transactedOn
+                ? new Date(transactionData.transactedOn)
+                : new Date();
+            if (isNaN(transactionDate.getTime())) {
+                return {
+                    error: "Invalid date format in transactedOn",
+                    statusCode: 400,
+                };
+            }
+            const monthName = transactionDate.toLocaleString('default', { month: 'long' });
+            const year = transactionDate.getFullYear().toString();
             var ledger = await prismaClient.ledger.findFirst({
-                where:{
-                    userId:userId,
+                where: {
+                    userId: userId,
                     month: monthName,
                     year: year
                 }
             })
-            if(!ledger){
+            if (!ledger) {
                 ledger = await prismaClient.ledger.create({
-                    data:{
+                    data: {
                         userId: userId,
                         month: monthName,
                         year: year,
@@ -62,7 +70,7 @@ export class TransactionService implements ITransactionService {
                 })
             }
             const transaction = await prismaClient.transaction.create({
-                data:{
+                data: {
                     amount: transactionData.amount,
                     ledgerId: ledger.id,
                     userId: userId,
@@ -70,7 +78,7 @@ export class TransactionService implements ITransactionService {
                     transactionType: transactionData.transactionType,
                     description: transactionData.description,
                     categoryId: transactionData.categoryId,
-                    paymentMethodId: transactionData.paymentMethodId,   
+                    paymentMethodId: transactionData.paymentMethodId,
                     transactedOn: transactionData.transactedOn,
                 }
             })
