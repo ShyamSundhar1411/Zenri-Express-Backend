@@ -1,6 +1,6 @@
 import prismaClient from "../../config/prismaClient";
 import { ServiceResult } from "../../domain/interfaces";
-import { Ledger, Ledgers, LedgerSchema } from "../../domain/ledgerSchema";
+import { Ledger, LedgerCreateRequest, Ledgers, LedgerSchema } from "../../domain/ledgerSchema";
 import { ILedgerService } from "../ILedgerService";
 
 
@@ -49,12 +49,14 @@ export class LedgerService implements ILedgerService {
         }
     }
 
-    async createLedger(userId: string): Promise<ServiceResult<Ledger>> {
+    async createLedger(userId: string,ledgerData: LedgerCreateRequest): Promise<ServiceResult<Ledger>> {
         try{
             const now = new Date();
-            const month = now.getMonth();
-            const monthName= now.toLocaleString('default', { month: 'long' });
-            const year = now.getFullYear().toString();
+            const monthName =
+            ledgerData.month ??
+            now.toLocaleString("default", { month: "long" });
+            const year = ledgerData.year ?? now.getFullYear().toString();
+            
             const ledger = await prismaClient.ledger.findFirst({
                where:{
                     month: monthName,

@@ -2,6 +2,7 @@ import { RequestHandler, Response } from "express";
 import { LedgerService } from "../services/impl/LedgerService";
 import { asyncHandler } from "../utils/asyncHandler";
 import { AuthRequest } from "../domain/interfaces";
+import { LedgerCreateRequestSchema } from "../domain/ledgerSchema";
 
 const ledgerService = new LedgerService();
 
@@ -24,7 +25,8 @@ export const getLedgerById: RequestHandler = asyncHandler(
 export const createLedger: RequestHandler = asyncHandler(
     async (req:AuthRequest, res:Response) => {
         const userId = req.userId!!;
-        const result = await ledgerService.createLedger(userId);
+        const ledgerData = LedgerCreateRequestSchema.parse(req.body)
+        const result = await ledgerService.createLedger(userId,ledgerData);
         return res.status(result.statusCode).json(result)
     }
 )

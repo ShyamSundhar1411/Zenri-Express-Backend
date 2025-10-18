@@ -529,6 +529,64 @@
  *           type: integer
  *           example: 200
  */
-
+/** 
+ * @openapi
+ * components:
+ *   schemas:
+ *     CreateLedgerRequest:
+ *       type: object
+ *       required:
+ *         - month
+ *         - year
+ *       properties:
+ *         month:
+ *           type: string
+ *           description: Full English month name (e.g., January, February, etc.)
+ *           enum:
+ *             - January
+ *             - February
+ *             - March
+ *             - April
+ *             - May
+ *             - June
+ *             - July
+ *             - August
+ *             - September
+ *             - October
+ *             - November
+ *             - December
+ *           example: "September"
+ *         year:
+ *           type: string
+ *           description: Four-digit year
+ *           pattern: "^[0-9]{4}$"
+ *           example: "2025"
+ *
+ *     CreateLedgerResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               example: "clm7zj0m4000twhl4o7wnfs7x"
+ *             userId:
+ *               type: string
+ *               example: "clm7zj0m4000twhl4o7wnfs7x"
+ *             month:
+ *               type: string
+ *               example: "September"
+ *             year:
+ *               type: string
+ *               example: "2025"
+ *             createdAt:
+ *               type: string
+ *               format: date-time
+ *               example: "2025-09-01T12:00:00.000Z"
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ */
 export {}
 
