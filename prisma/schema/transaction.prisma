@@ -81,6 +81,36 @@ model PaymentMethod {
     updatedAt           DateTime          @updatedAt
 }
 
+enum PaymentCycle {
+    WEEKLY
+    MONTHLY
+    YEARLY
+}
+
+enum SubscriptionStatus {
+    SUBSCRIBED
+    UNSUBSCRIBED
+    BILL_OVERDUE
+}
+
+model Subscription {
+    id               String             @id @default(uuid())
+    susbcriptionName String
+    amount           Decimal
+    subscribedOn     DateTime           @default(now())
+    expiresOn        DateTime           @default(now())
+    lastBilledAt     DateTime
+    nextBillingDate  DateTime
+    paymentCycle     PaymentCycle       @default(MONTHLY)
+    status           SubscriptionStatus @default(SUBSCRIBED)
+    userId           String
+    user             User               @relation(fields: [userId], references: [id])
+    transactions     Transaction[]
+    isDeleted        Boolean            @default(false)
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+}
+
 model Transaction {
     id              String          @id @default(uuid())
     amount          Decimal
@@ -95,6 +125,8 @@ model Transaction {
 
     paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
     paymentMethodId String?
+    subscriptionId  String?
+    subscription    Subscription? @relation(fields:[subscriptionId],references: [id])
     description     String?
     transactedOn    DateTime
     isDeleted       Boolean        @default(false)

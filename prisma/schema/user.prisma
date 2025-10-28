@@ -10,6 +10,7 @@ model User {
     budgets        Budget[]
     transactions   Transaction[]
     paymentMethods PaymentMethod[]
+    subscriptions  Subscription[]
     isDisabled     Boolean         @default(false)
     createdAt      DateTime        @default(now())
     updatedAt      DateTime        @updatedAt
