@@ -13,7 +13,7 @@ app.use(jsonParser)
 app.use(corsMiddleware)
 app.use(helmetMiddleware)
 app.use(compressionMiddleware)
-app.use(loggerMiddleware)
+// app.use(loggerMiddleware)
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.get("/health", (req: Request, res: Response) => [
   res.status(200).json({

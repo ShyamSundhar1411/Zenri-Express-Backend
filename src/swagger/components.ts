@@ -741,5 +741,167 @@
  *           type: integer
  *           example: 200
  */
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     # =====================
+ *     # Subscription Schemas
+ *     # =====================
+ *     PaymentCycle:
+ *       type: string
+ *       enum: [WEEKLY, MONTHLY, YEARLY]
+ *       example: MONTHLY
+ *
+ *     SubscriptionStatus:
+ *       type: string
+ *       enum: [SUBSCRIBED, UNSUBSCRIBED, BILL_OVERDUE]
+ *       example: SUBSCRIBED
+ *
+ *     Subscription:
+ *       type: object
+ *       title: Subscription
+ *       description: "Represents a user's active or inactive subscription plan."
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "sub_12345"
+ *         subscriptionName:
+ *           type: string
+ *           example: "Netflix Premium Plan"
+ *         amount:
+ *           type: string
+ *           description: "Decimal amount representing subscription cost (Prisma.Decimal)"
+ *           example: "999.99"
+ *         currencyCode:
+ *           type: string
+ *           example: "USD"
+ *         subscribedOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-01T12:00:00Z"
+ *         expiresOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-09-01T12:00:00Z"
+ *         lastBilledAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-01T12:00:00Z"
+ *         nextBillingDate:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-11-01T12:00:00Z"
+ *         paymentCycle:
+ *           $ref: "#/components/schemas/PaymentCycle"
+ *         subscriptionStatus:
+ *           $ref: "#/components/schemas/SubscriptionStatus"
+ *         userId:
+ *           type: string
+ *           example: "usr_67890"
+ *         isDeleted:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T12:34:56Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-29T12:34:56Z"
+ *       required:
+ *         - id
+ *         - subscriptionName
+ *         - amount
+ *         - currencyCode
+ *         - subscribedOn
+ *         - expiresOn
+ *         - lastBilledAt
+ *         - nextBillingDate
+ *         - paymentCycle
+ *         - subscriptionStatus
+ *         - userId
+ *         - isDeleted
+ *         - createdAt
+ *         - updatedAt
+ *
+ *     Subscriptions:
+ *       type: array
+ *       title: Subscriptions
+ *       description: "List of Subscription objects."
+ *       items:
+ *         $ref: "#/components/schemas/Subscription"
+ *
+ *     GetMySubscriptionsResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Subscriptions"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ *
+ *     CreateSubscriptionRequest:
+ *       type: object
+ *       required:
+ *         - subscriptionName
+ *         - amount
+ *         - currencyCode
+ *         - paymentCycle
+ *         - subscriptionStatus
+ *         - subscribedOn
+ *         - expiresOn
+ *       properties:
+ *         subscriptionName:
+ *           type: string
+ *           example: "Spotify Premium"
+ *         amount:
+ *           type: string
+ *           description: "Decimal amount representing subscription cost."
+ *           example: "199.00"
+ *         currencyCode:
+ *           type: string
+ *           example: "INR"
+ *         paymentCycle:
+ *           $ref: "#/components/schemas/PaymentCycle"
+ *         subscriptionStatus:
+ *           $ref: "#/components/schemas/SubscriptionStatus"
+ *         subscribedOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-07-15T00:00:00Z"
+ *         expiresOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-07-15T00:00:00Z"
+ *         lastBilledAt:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: "2025-09-01T00:00:00Z"
+ *         nextBillingDate:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: "2025-10-01T00:00:00Z"
+ *
+ *     CreateSubscriptionResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           $ref: "#/components/schemas/Subscription"
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 201
+ */
 
 export {}

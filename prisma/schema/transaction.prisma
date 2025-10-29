@@ -97,6 +97,7 @@ model Subscription {
     id               String             @id @default(uuid())
     susbcriptionName String
     amount           Decimal
+    currencyCode     String
     subscribedOn     DateTime           @default(now())
     expiresOn        DateTime           @default(now())
     lastBilledAt     DateTime
@@ -126,7 +127,7 @@ model Transaction {
     paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
     paymentMethodId String?
     subscriptionId  String?
-    subscription    Subscription? @relation(fields:[subscriptionId],references: [id])
+    subscription    Subscription?  @relation(fields: [subscriptionId], references: [id])
     description     String?
     transactedOn    DateTime
     isDeleted       Boolean        @default(false)
