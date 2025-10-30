@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuthMiddleware } from "../middlewares/authMiddleware";
-import { getMySubscriptions, getSubscriptionById } from "../controllers/subscriptionController";
+import { createSubscription, getMySubscriptions, getSubscriptionById } from "../controllers/subscriptionController";
 
 const subscriptionRouter:Router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -67,4 +67,45 @@ subscriptionRouter.get("/", authMiddleware.authRequired, getMySubscriptions);
  *         description: Bad request
  */
 subscriptionRouter.get("/:subscriptionId", authMiddleware.authRequired, getSubscriptionById);
+/**
+ * @swagger
+ * /api/v1/subscriptions:
+ *   post:
+ *     summary: Create a new subscription for the authenticated user
+ *     tags:
+ *       - Subscriptions
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/CreateSubscriptionRequest"
+ *           example:
+ *             subscriptionName: "Pro Plan"
+ *             amount: 49.99
+ *             currencyCode: "USD"
+ *             subscribedOn: "2025-10-31T00:00:00Z"
+ *             expiresOn: "2026-10-31T00:00:00Z"
+ *             lastBilledAt: "2025-10-01T00:00:00Z"
+ *             nextBillingDate: "2025-11-01T00:00:00Z"
+ *             paymentCycle: "MONTHLY"
+ *             subscriptionStatus: "SUBSCRIBED"
+ *     responses:
+ *       201:
+ *         description: Subscription successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Subscription"
+ *       400:
+ *         description: Bad request - Validation failed or missing fields
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *       409:
+ *         description: Conflict - Subscription with the same name already exists
+ */
+subscriptionRouter.post("/", authMiddleware.authRequired, createSubscription);
+
 export default subscriptionRouter;

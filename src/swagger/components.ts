@@ -903,5 +903,57 @@
  *           type: integer
  *           example: 201
  */
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CreateSubscriptionRequest:
+ *       type: object
+ *       required:
+ *         - subscriptionName
+ *         - amount
+ *         - currencyCode
+ *         - subscribedOn
+ *         - expiresOn
+ *         - lastBilledAt
+ *         - nextBillingDate
+ *         - paymentCycle
+ *         - subscriptionStatus
+ *       properties:
+ *         subscriptionName:
+ *           type: string
+ *           example: "Pro Plan"
+ *         amount:
+ *           type: number
+ *           format: decimal
+ *           example: 49.99
+ *         currencyCode:
+ *           type: string
+ *           example: "USD"
+ *         subscribedOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-31T00:00:00Z"
+ *         expiresOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-10-31T00:00:00Z"
+ *         lastBilledAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-01T00:00:00Z"
+ *         nextBillingDate:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-11-01T00:00:00Z"
+ *         paymentCycle:
+ *           type: string
+ *           enum: ["WEEKLY", "MONTHLY", "YEARLY"]
+ *           example: "MONTHLY"
+ *         subscriptionStatus:
+ *           type: string
+ *           enum: ["SUBSCRIBED", "UNSUBSCRIBED", "BILL_OVERDUE"]
+ *           example: "SUBSCRIBED"
+ */
 
 export {}

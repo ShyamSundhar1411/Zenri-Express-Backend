@@ -95,7 +95,7 @@ enum SubscriptionStatus {
 
 model Subscription {
     id               String             @id @default(uuid())
-    susbcriptionName String
+    subscriptionName String
     amount           Decimal
     currencyCode     String
     subscribedOn     DateTime           @default(now())
