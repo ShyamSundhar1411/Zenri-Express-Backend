@@ -8,7 +8,7 @@ export const PaymentMethodTypeSchema = z.object({
   updatedAt: z.coerce.date()
 })
 
-export const PaymentMethoSchema = z.object({
+export const PaymentMethodSchema = z.object({
   id: z.string(),
   paymentMethodTypeId: z.string(),
   creditCardId: z.string().nullable(),
@@ -24,7 +24,19 @@ export const PaymentMethoSchema = z.object({
   updatedAt: z.coerce.date()
 })
 
+export const PaymentMethodCreateRequestSchema = z.object({
+  paymentMethodTypeId: z.string(),
+  creditCardId: z.string().nullable(),
+  debitCardId: z.string().nullable(),
+  bankAccountId: z.string().nullable(),
+  notes: z.string().nullable(),
+  providerName: z.string().nullable(),
+  externalHandle: z.string().nullable(),
+  isDefault: z.boolean(),
+})
+
 export type PaymentMethodType = z.infer<typeof PaymentMethodTypeSchema>
 export type PaymentMethodTypes = z.infer<(typeof PaymentMethodTypeSchema)[]>
-export type PaymentMethod = z.infer<typeof PaymentMethoSchema>
-export type PaymentMethods = z.infer<(typeof PaymentMethoSchema)[]>
+export type PaymentMethod = z.infer<typeof PaymentMethodSchema>
+export type PaymentMethods = z.infer<(typeof PaymentMethodSchema)[]>
+export type PaymentMethodCreateRequest = z.infer<typeof PaymentMethodCreateRequestSchema>

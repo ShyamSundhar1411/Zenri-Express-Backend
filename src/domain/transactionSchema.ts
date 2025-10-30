@@ -23,6 +23,7 @@ export const TransactionCreateRequestSchema = z.object({
   transactionType: TransactionType.default("DEBIT"),
   paymentMethodId: z.string(),
   categoryId: z.string(),
+  subscriptionId: z.string().nullable(),
   description: z.string().nullable(),
   transactedOn: z.coerce.date().default(new Date())
 })
