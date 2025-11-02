@@ -1,6 +1,6 @@
 import prismaClient from "../../config/prismaClient";
 import { ServiceResult } from "../../domain/interfaces";
-import { PaymentMethods, PaymentMethodCreateRequest, PaymentMethod, PaymentMethodSchema } from "../../domain/paymentMethodSchema";
+import { PaymentMethods, PaymentMethodCreateRequest, PaymentMethod, PaymentMethodSchema, PaymentMethodTypeSchema, PaymentMethodTypes } from "../../domain/paymentMethodSchema";
 import { IPaymentMethodService } from "../IPaymentMethodService";
 
 export class PaymentMethodService implements IPaymentMethodService{
@@ -45,6 +45,22 @@ export class PaymentMethodService implements IPaymentMethodService{
         }catch(error:any){
             return {
                 error:error,
+                statusCode: 400
+            }
+        }
+    }
+    async getAllPaymentMethodTypes(): Promise<ServiceResult<PaymentMethodTypes>> {
+        try{
+            const paymentMethodTypes = await prismaClient.paymentMethodType.findMany()
+            return {
+                data: paymentMethodTypes.map((paymentMethodType) => {
+                    return PaymentMethodTypeSchema.parse(paymentMethodType)
+                }),
+                statusCode: 200
+            }
+        }catch(error:any){
+            return {
+                error: error,
                 statusCode: 400
             }
         }

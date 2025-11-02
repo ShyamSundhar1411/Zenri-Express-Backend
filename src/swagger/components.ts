@@ -955,5 +955,170 @@
  *           enum: ["SUBSCRIBED", "UNSUBSCRIBED", "BILL_OVERDUE"]
  *           example: "SUBSCRIBED"
  */
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     PaymentMethodType:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "pmtype_001"
+ *         paymentMethodTypeName:
+ *           type: string
+ *           example: "Credit Card"
+ *         isDisabled:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-11-01T12:00:00Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-11-02T12:00:00Z"
+ *
+ *     PaymentMethod:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "pm_12345"
+ *         paymentMethodTypeId:
+ *           type: string
+ *           example: "pmtype_001"
+ *         creditCardId:
+ *           type: string
+ *           nullable: true
+ *           example: "cc_001"
+ *         debitCardId:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         bankAccountId:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         notes:
+ *           type: string
+ *           nullable: true
+ *           example: "Personal payment method"
+ *         providerName:
+ *           type: string
+ *           nullable: true
+ *           example: "Stripe"
+ *         externalHandle:
+ *           type: string
+ *           nullable: true
+ *           example: "stripe_12345"
+ *         userId:
+ *           type: string
+ *           example: "user_789"
+ *         isDefault:
+ *           type: boolean
+ *           example: true
+ *         isDeleted:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-11-01T10:00:00Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-11-02T10:00:00Z"
+ *
+ *     PaymentMethodCreateRequest:
+ *       type: object
+ *       required:
+ *         - paymentMethodTypeId
+ *         - isDefault
+ *       properties:
+ *         paymentMethodTypeId:
+ *           type: string
+ *           example: "pmtype_001"
+ *         creditCardId:
+ *           type: string
+ *           nullable: true
+ *           example: "cc_123"
+ *         debitCardId:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         bankAccountId:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         notes:
+ *           type: string
+ *           nullable: true
+ *           example: "For recurring subscriptions"
+ *         providerName:
+ *           type: string
+ *           nullable: true
+ *           example: "Stripe"
+ *         externalHandle:
+ *           type: string
+ *           nullable: true
+ *           example: "stripe_67890"
+ *         isDefault:
+ *           type: boolean
+ *           example: true
+ */
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     PaymentMethodType:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier for the payment method type
+ *           example: "pmtype_001"
+ *         paymentMethodTypeName:
+ *           type: string
+ *           description: Human-readable name of the payment method type
+ *           example: "Debit Card"
+ *         isDisabled:
+ *           type: boolean
+ *           description: Indicates if the payment method type is currently disabled
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp when this payment method type was created
+ *           example: "2025-11-01T10:00:00Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp when this payment method type was last updated
+ *           example: "2025-11-02T10:00:00Z"
+ *
+ *     PaymentMethodTypes:
+ *       type: array
+ *       description: List of available payment method types
+ *       items:
+ *         $ref: '#/components/schemas/PaymentMethodType'
+ *       example:
+ *         - id: "pmtype_001"
+ *           paymentMethodTypeName: "GPay"
+ *           isDisabled: false
+ *           createdAt: "2025-11-01T10:00:00Z"
+ *           updatedAt: "2025-11-02T10:00:00Z"
+ *         - id: "pmtype_002"
+ *           paymentMethodTypeName: "Debit Card"
+ *           isDisabled: false
+ *           createdAt: "2025-11-01T10:00:00Z"
+ *           updatedAt: "2025-11-02T10:00:00Z"
+ *         - id: "pmtype_003"
+ *           paymentMethodTypeName: "NetBanking"
+ *           isDisabled: false
+ *           createdAt: "2025-11-01T10:00:00Z"
+ *           updatedAt: "2025-11-02T10:00:00Z"
+ */
 
 export {}

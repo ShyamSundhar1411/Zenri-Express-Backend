@@ -8,6 +8,7 @@ export const PaymentMethodTypeSchema = z.object({
   updatedAt: z.coerce.date()
 })
 
+export const PaymentMethodTypesSchema = z.array(PaymentMethodTypeSchema)
 export const PaymentMethodSchema = z.object({
   id: z.string(),
   paymentMethodTypeId: z.string(),
@@ -36,7 +37,7 @@ export const PaymentMethodCreateRequestSchema = z.object({
 })
 
 export type PaymentMethodType = z.infer<typeof PaymentMethodTypeSchema>
-export type PaymentMethodTypes = z.infer<(typeof PaymentMethodTypeSchema)[]>
+export type PaymentMethodTypes = z.infer<typeof PaymentMethodTypesSchema>
 export type PaymentMethod = z.infer<typeof PaymentMethodSchema>
 export type PaymentMethods = z.infer<(typeof PaymentMethodSchema)[]>
 export type PaymentMethodCreateRequest = z.infer<typeof PaymentMethodCreateRequestSchema>
