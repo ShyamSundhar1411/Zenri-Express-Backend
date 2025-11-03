@@ -26,6 +26,7 @@ export class PaymentMethodService implements IPaymentMethodService{
     }
     async createPaymentMethod(userId: string, paymentMethodData: PaymentMethodCreateRequest): Promise<ServiceResult<PaymentMethod>> {
         try{
+            const now = new Date()
             const paymentMethod = await prismaClient.paymentMethod.create({
                 data:{
                     creditCardId: paymentMethodData.creditCardId,
@@ -35,7 +36,9 @@ export class PaymentMethodService implements IPaymentMethodService{
                     notes: paymentMethodData.notes,
                     providerName: paymentMethodData.providerName,
                     externalHandle: paymentMethodData.externalHandle,
-                    userId: userId
+                    userId: userId,
+                    createdAt: now,
+                    updatedAt: now
                 }
             })
             return {

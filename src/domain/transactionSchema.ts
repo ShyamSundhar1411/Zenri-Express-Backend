@@ -18,7 +18,7 @@ export const TransactionSchema = z.object({
 })
 
 export const TransactionCreateRequestSchema = z.object({
-  amount: z.instanceof(Prisma.Decimal),
+  amount: z.number(),
   currencyCode: z.string(),
   transactionType: TransactionType.default("DEBIT"),
   paymentMethodId: z.string(),

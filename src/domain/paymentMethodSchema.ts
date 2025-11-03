@@ -27,13 +27,13 @@ export const PaymentMethodSchema = z.object({
 
 export const PaymentMethodCreateRequestSchema = z.object({
   paymentMethodTypeId: z.string(),
-  creditCardId: z.string().nullable(),
-  debitCardId: z.string().nullable(),
-  bankAccountId: z.string().nullable(),
-  notes: z.string().nullable(),
-  providerName: z.string().nullable(),
-  externalHandle: z.string().nullable(),
-  isDefault: z.boolean(),
+  creditCardId: z.string().nullable().default(null),
+  debitCardId: z.string().nullable().default(null),
+  bankAccountId: z.string().nullable().default(null),
+  notes: z.string().nullable().default(null),
+  providerName: z.string().nullable().default(null),
+  externalHandle: z.string().nullable().default(null),
+  isDefault: z.boolean().default(false),
 })
 
 export type PaymentMethodType = z.infer<typeof PaymentMethodTypeSchema>

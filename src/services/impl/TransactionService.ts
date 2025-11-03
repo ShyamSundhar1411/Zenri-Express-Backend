@@ -6,6 +6,7 @@ import {
   Transaction,
   TransactionSchema
 } from "../../domain/transactionSchema"
+import { processTransaction } from "../../utils/transactionUtils"
 import { ITransactionService } from "../ITransactionService"
 
 export class TransactionService implements ITransactionService {
@@ -58,57 +59,67 @@ export class TransactionService implements ITransactionService {
     transactionData: TransactionCreateRequest
   ): Promise<ServiceResult<Transaction>> {
     try {
-      const transactionDate = transactionData.transactedOn
-        ? new Date(transactionData.transactedOn)
-        : new Date()
-      if (isNaN(transactionDate.getTime())) {
-        return {
-          error: "Invalid date format in transactedOn",
-          statusCode: 400
+      const result = await prismaClient.$transaction(async (tx) => {
+        const transactionDate = transactionData.transactedOn
+          ? new Date(transactionData.transactedOn)
+          : new Date();
+
+        if (isNaN(transactionDate.getTime())) {
+          throw new Error("Invalid date format in transactedOn");
         }
-      }
-      const monthName = transactionDate.toLocaleString("default", {
-        month: "long"
-      })
-      const year = transactionDate.getFullYear().toString()
-      let ledger = await prismaClient.ledger.findFirst({
-        where: {
-          userId: userId,
-          month: monthName,
-          year: year
-        }
-      })
-      if (!ledger) {
-        ledger = await prismaClient.ledger.create({
-          data: {
-            userId: userId,
+
+        const monthName = transactionDate.toLocaleString("default", {
+          month: "long",
+        });
+        const year = transactionDate.getFullYear().toString();
+
+
+        let ledger = await tx.ledger.findFirst({
+          where: {
+            userId,
             month: monthName,
-            year: year
-          }
-        })
-      }
-      const transaction = await prismaClient.transaction.create({
-        data: {
-          amount: transactionData.amount,
-          ledgerId: ledger.id,
-          userId: userId,
-          currencyCode: transactionData.currencyCode,
-          transactionType: transactionData.transactionType,
-          description: transactionData.description,
-          categoryId: transactionData.categoryId,
-          paymentMethodId: transactionData.paymentMethodId,
-          transactedOn: transactionData.transactedOn
+            year,
+          },
+        });
+
+        if (!ledger) {
+          ledger = await tx.ledger.create({
+            data: {
+              userId,
+              month: monthName,
+              year,
+            },
+          });
         }
-      })
+
+        await processTransaction(tx,transactionData.paymentMethodId,transactionData.amount,transactionData.transactionType)
+        const transaction = await tx.transaction.create({
+          data: {
+            amount: transactionData.amount,
+            ledgerId: ledger.id,
+            userId,
+            currencyCode: transactionData.currencyCode,
+            transactionType: transactionData.transactionType,
+            description: transactionData.description,
+            categoryId: transactionData.categoryId,
+            paymentMethodId: transactionData.paymentMethodId,
+            transactedOn: transactionData.transactedOn,
+          },
+        });
+
+        return transaction;
+      });
+
       return {
-        data: TransactionSchema.parse(transaction),
-        statusCode: 201
-      }
+        data: TransactionSchema.parse(result),
+        statusCode: 201,
+      };
     } catch (error: any) {
       return {
         error: error.message || error,
-        statusCode: 400
-      }
+        statusCode: 400,
+      };
     }
   }
+
 }
