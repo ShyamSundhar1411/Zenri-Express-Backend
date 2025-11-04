@@ -11,6 +11,11 @@ export const CategorySchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
 })
-
+export const CategoriesSchema = z.array(CategorySchema)
+export const CategoryCreateRequestSchema = z.object({
+  categoryName: z.string()
+})
 export type Category = z.infer<typeof CategorySchema>
-export type Categories = z.infer<(typeof CategorySchema)[]>
+export type Categories = z.infer<typeof CategoriesSchema>
+export type CategoryCreateRequest = z.infer<typeof CategoryCreateRequestSchema>
+

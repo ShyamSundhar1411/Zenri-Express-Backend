@@ -1,6 +1,8 @@
 import prismaClient from "../../config/prismaClient"
 import {
   Categories,
+  Category,
+  CategoryCreateRequest,
   CategorySchema,
   CategoryType
 } from "../../domain/categorySchema"
@@ -36,6 +38,29 @@ export class CategoryService implements ICategoryService {
       return {
         error: error,
         statusCode: 400
+      }
+    }
+  }
+  async createCategory(userId: string, validatedData: CategoryCreateRequest): Promise<ServiceResult<Category>>{
+    try{
+      const now = new Date()
+      const category = await prismaClient.category.create({
+        data:{
+          categoryName:validatedData.categoryName,
+          categoryType: CategoryType.enum.CUSTOM,
+          userId: userId,
+          createdAt: now,
+          updatedAt: now,
+        }
+      })
+      return {
+        data: CategorySchema.parse(category),
+        statusCode: 201
+      }
+    }catch(error:any){
+      return {
+        error: error,
+        statusCode:400
       }
     }
   }
