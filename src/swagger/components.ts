@@ -680,8 +680,8 @@
  *         - paymentMethodId
  *       properties:
  *         amount:
- *           type: string
- *           example: "1200.50"
+ *           type: number
+ *           example: 1200.50
  *         currencyCode:
  *           type: string
  *           example: "USD"
@@ -1121,4 +1121,50 @@
  *           updatedAt: "2025-11-02T10:00:00Z"
  */
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     # =====================
+ *     # Category Schemas
+ *     # =====================
+ *     CategoryCreateRequest:
+ *       type: object
+ *       required:
+ *         - categoryName
+ *       properties:
+ *         categoryName:
+ *           type: string
+ *           example: "Cafes & Restaurants"
+ *     Category:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *           example: "b7f4b4b1-2e1f-4f3b-9e5a-1c2c89e4b92a"
+ *         categoryName:
+ *           type: string
+ *           example: "Cafes & Restaurants"
+ *         categoryType:
+ *           type: string
+ *           enum: [USER, SYSTEM]
+ *           example: "USER"
+ *         userId:
+ *           type: string
+ *           format: uuid
+ *           nullable: true
+ *           example: "b1a9d9df-3b41-4ed1-889e-75d8eae8332c"
+ *         isDeleted:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-08T07:24:06.416Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-08T07:24:06.416Z"
+ */
 export {}

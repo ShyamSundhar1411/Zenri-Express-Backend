@@ -27,8 +27,6 @@ const authMiddleware  = new AuthMiddleware()
  *         description: Unauthorized - Missing or invalid authentication token
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse401'
  */
 
 paymentMethodRouter.get("/", authMiddleware.authRequired, getMyPaymentMethods)
@@ -78,8 +76,6 @@ paymentMethodRouter.get("/", authMiddleware.authRequired, getMyPaymentMethods)
  *         description: Unauthorized - Missing or invalid authentication token
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse401'
  */
 
 paymentMethodRouter.post("/", authMiddleware.authRequired, createPaymentMethod)

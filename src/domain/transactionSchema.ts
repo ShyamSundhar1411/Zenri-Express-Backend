@@ -6,7 +6,7 @@ export const TransactionSchema = z.object({
   id: z.string(),
   amount: z.instanceof(Prisma.Decimal),
   currencyCode: z.string(),
-  TransactionType: TransactionType.default("DEBIT"),
+  transactionType: TransactionType.default("DEBIT"),
   categoryId: z.string(),
   ledgerId: z.string(),
   userId: z.string(),
@@ -23,7 +23,7 @@ export const TransactionCreateRequestSchema = z.object({
   transactionType: TransactionType.default("DEBIT"),
   paymentMethodId: z.string(),
   categoryId: z.string(),
-  subscriptionId: z.string().nullable(),
+  subscriptionId: z.string().nullable().optional(),
   description: z.string().nullable(),
   transactedOn: z.coerce.date().default(new Date())
 })
