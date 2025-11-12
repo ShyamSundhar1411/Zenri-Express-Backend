@@ -20,6 +20,10 @@ app.get("/health", (req: Request, res: Response) => [
     message: "Server is up and running"
   })
 ])
+app.get("/swagger.json", (req: Request, res: Response) => {
+  res.setHeader("Content-Type", "application/json");
+  res.status(200).json(swaggerSpec);
+});
 app.use("/api/v1", zenriRouter)
 app.use(errorHandler)
 export default app

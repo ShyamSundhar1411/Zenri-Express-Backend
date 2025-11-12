@@ -23,10 +23,6 @@ const authMiddleware  = new AuthMiddleware()
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/PaymentMethod'
- *       401:
- *         description: Unauthorized - Missing or invalid authentication token
- *         content:
- *           application/json:
  */
 
 paymentMethodRouter.get("/", authMiddleware.authRequired, getMyPaymentMethods)
@@ -66,16 +62,7 @@ paymentMethodRouter.get("/", authMiddleware.authRequired, getMyPaymentMethods)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/PaymentMethod'
- *       400:
- *         description: Bad Request - Invalid input data
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse400'
- *       401:
- *         description: Unauthorized - Missing or invalid authentication token
- *         content:
- *           application/json:
+ *             
  */
 
 paymentMethodRouter.post("/", authMiddleware.authRequired, createPaymentMethod)
