@@ -54,6 +54,30 @@ export class TransactionService implements ITransactionService {
       }
     }
   }
+  async getTransactionsByLedgerId(
+    userId: string,
+    ledgerId: string
+  ): Promise<ServiceResult<Transactions>> {
+    try {
+      const transactions = await prismaClient.transaction.findMany({
+        where: {
+          userId: userId,
+          ledgerId: ledgerId
+        }
+      })
+      return {
+        data: transactions.map((transaction) =>
+          TransactionSchema.parse(transaction)
+        ),
+        statusCode: 200
+      }
+    } catch (error: any) {
+      return {
+        error: error.message || error,
+        statusCode: 400
+      }
+    }
+  }
   async createTransaction(
     userId: string,
     transactionData: TransactionCreateRequest

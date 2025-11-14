@@ -11,6 +11,10 @@ export interface ITransactionService {
     userId: string,
     transactionId: string
   ): Promise<ServiceResult<Transaction>>
+  getTransactionsByLedgerId(
+    userId: string,
+    ledgerId: string
+  ): Promise<ServiceResult<Transactions>>
   createTransaction(
     userId: string,
     transactionData: TransactionCreateRequest

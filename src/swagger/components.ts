@@ -1167,4 +1167,83 @@
  *           format: date-time
  *           example: "2025-10-08T07:24:06.416Z"
  */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Transaction:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "tx_abc123"
+ *         amount:
+ *           type: number
+ *           example: 500.75
+ *         currencyCode:
+ *           type: string
+ *           example: "USD"
+ *         transactionType:
+ *           type: string
+ *           enum: ["CREDIT", "DEBIT"]
+ *           example: "DEBIT"
+ *         categoryId:
+ *           type: string
+ *           example: "cat_001"
+ *         ledgerId:
+ *           type: string
+ *           example: "led_001"
+ *         userId:
+ *           type: string
+ *           example: "usr_001"
+ *         paymentMethodId:
+ *           type: string
+ *           example: "pm_001"
+ *         description:
+ *           type: string
+ *           example: "Grocery purchase"
+ *         transactedOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-18T10:30:00Z"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *
+ *     TransactionCreateRequest:
+ *       type: object
+ *       required:
+ *         - amount
+ *         - currencyCode
+ *         - transactionType
+ *         - categoryId
+ *       properties:
+ *         amount:
+ *           type: number
+ *           example: 200.5
+ *         currencyCode:
+ *           type: string
+ *           example: "INR"
+ *         transactionType:
+ *           type: string
+ *           enum: ["CREDIT", "DEBIT"]
+ *           example: "CREDIT"
+ *         paymentMethodId:
+ *           type: string
+ *           example: "pm_123"
+ *         categoryId:
+ *           type: string
+ *           example: "cat_123"
+ *         description:
+ *           type: string
+ *           example: "Freelance income"
+ *         transactedOn:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-10-15T12:00:00Z"
+ */
 export {}

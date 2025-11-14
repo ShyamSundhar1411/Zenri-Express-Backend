@@ -11,85 +11,6 @@ const authMiddleware = new AuthMiddleware()
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Transaction:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           example: "tx_abc123"
- *         amount:
- *           type: number
- *           example: 500.75
- *         currencyCode:
- *           type: string
- *           example: "USD"
- *         transactionType:
- *           type: string
- *           enum: ["CREDIT", "DEBIT"]
- *           example: "DEBIT"
- *         categoryId:
- *           type: string
- *           example: "cat_001"
- *         ledgerId:
- *           type: string
- *           example: "led_001"
- *         userId:
- *           type: string
- *           example: "usr_001"
- *         paymentMethodId:
- *           type: string
- *           example: "pm_001"
- *         description:
- *           type: string
- *           example: "Grocery purchase"
- *         transactedOn:
- *           type: string
- *           format: date-time
- *           example: "2025-10-18T10:30:00Z"
- *         createdAt:
- *           type: string
- *           format: date-time
- *         updatedAt:
- *           type: string
- *           format: date-time
- *
- *     TransactionCreateRequest:
- *       type: object
- *       required:
- *         - amount
- *         - currencyCode
- *         - transactionType
- *         - categoryId
- *       properties:
- *         amount:
- *           type: number
- *           example: 200.5
- *         currencyCode:
- *           type: string
- *           example: "INR"
- *         transactionType:
- *           type: string
- *           enum: ["CREDIT", "DEBIT"]
- *           example: "CREDIT"
- *         paymentMethodId:
- *           type: string
- *           example: "pm_123"
- *         categoryId:
- *           type: string
- *           example: "cat_123"
- *         description:
- *           type: string
- *           example: "Freelance income"
- *         transactedOn:
- *           type: string
- *           format: date-time
- *           example: "2025-10-15T12:00:00Z"
- */
-
-/**
- * @swagger
  * /api/v1/transactions/my-transactions:
  *   get:
  *     summary: Get all transactions for the authenticated user
@@ -188,5 +109,43 @@ transactionRouter.get(
  *         description: Unauthorized
  */
 transactionRouter.post("/", authMiddleware.authRequired, createTransaction)
-
+/**
+ * @swagger
+ * /api/v1/transactions/{ledgerId}:
+ *   get:
+ *     summary: Get all transactions for the given ledger ID
+ *     tags:
+ *       - Transactions
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: ledgerId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the ledger whose transactions should be retrieved
+ *     responses:
+ *       200:
+ *         description: Successfully fetched transactions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 transactions:
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/components/schemas/Transaction"
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Ledger not found
+ *       500:
+ *         description: Internal server error
+ */
+transactionRouter.get("/:ledgerId", authMiddleware.authRequired, getTransactionById)
 export default transactionRouter

@@ -37,3 +37,15 @@ export const createTransaction: RequestHandler = asyncHandler(
     return res.status(result.statusCode).json(result)
   }
 )
+
+export const getTransactionsByLedgerId: RequestHandler = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const userId = req.userId!!
+    const ledgerId = req.params.ledgerId!!
+    const result = await transactionService.getTransactionsByLedgerId(
+      userId,
+      ledgerId
+    )
+    return res.status(result.statusCode).json(result)
+  }
+)
