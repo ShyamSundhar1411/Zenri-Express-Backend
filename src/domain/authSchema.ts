@@ -16,10 +16,22 @@ export const SignUpSchema = z.object({
     })
 })
 
+export const TokenSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string()
+})
+
 export const LoginSchema = z.object({
   email: z.email({ message: "Invalid Email" }),
   password: z.string()
 })
 
+
+export const RefreshTokenSchema = z.object({
+  refreshToken: z.string()
+})
 export type SignUpRequest = z.infer<typeof SignUpSchema>
 export type LoginRequest = z.infer<typeof LoginSchema>
+export type RefreshTokenRequest = z.infer<typeof RefreshTokenSchema>
+export type Token = z.infer<typeof TokenSchema>
+

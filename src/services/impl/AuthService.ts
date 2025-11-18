@@ -1,4 +1,4 @@
-import { LoginRequest, SignUpRequest } from "../../domain/authSchema"
+import { LoginRequest, RefreshTokenRequest, SignUpRequest, Token, TokenSchema } from "../../domain/authSchema"
 
 import { supabase } from "../../config/supabase"
 import { IAuthService } from "../IAuthService"
@@ -6,8 +6,10 @@ import { IAuthService } from "../IAuthService"
 import prismaClient from "../../config/prismaClient"
 import { UserSchemaWithTokens, UserWithToken } from "../../domain/userSchema"
 import { ServiceResult } from "../../domain/interfaces"
+import { access } from "fs"
 
 export class AuthService implements IAuthService {
+
   async login(
     requestData: LoginRequest
   ): Promise<ServiceResult<UserWithToken>> {
@@ -128,4 +130,47 @@ export class AuthService implements IAuthService {
       }
     }
   }
+  async getAccessTokenFromRefreshToken(
+    requestData: RefreshTokenRequest
+  ): Promise<ServiceResult<Token>> {
+    try {
+      const { data, error } = await supabase.auth.refreshSession({
+        refresh_token: requestData.refreshToken,
+      });
+
+      if (error || !data?.session) {
+        return {
+          error: error?.message ?? "Invalid refresh token",
+          statusCode: 401,
+        };
+      }
+
+      const session = data.session;
+
+     
+      const tokenData = TokenSchema.safeParse({
+        accessToken: session.access_token,
+        refreshToken: session.refresh_token,
+      });
+
+      if (!tokenData.success) {
+        return {
+          error: "Malformed token data from Supabase",
+          statusCode: 500,
+        };
+      }
+
+      return {
+        data: tokenData.data,
+        statusCode: 200,
+      };
+
+    } catch (err: any) {
+      return {
+        error: err?.message ?? "Unexpected error",
+        statusCode: 500,
+      };
+    }
+  }
+
 }

@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { signup, login } from "../controllers/authController"
+import { signup, login, getAccessTokenFromRefreshToken } from "../controllers/authController"
 
 const authRouter: Router = Router()
 /**
@@ -51,5 +51,33 @@ authRouter.post("/signup", signup)
  *         description: Invalid credentials
  */
 authRouter.post("/login", login)
+/**
+ * @swagger
+ * /api/v1/auth/refresh-token:
+ *   post:
+ *     summary: Refresh access token using refresh token
+ *     tags:
+ *       - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/RefreshTokenRequest"
+ *     responses:
+ *       200:
+ *         description: Tokens refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Token"
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Invalid or expired refresh token
+ *       500:
+ *         description: Internal server error
+ */
 
+authRouter.post("/refresh-token", getAccessTokenFromRefreshToken)
 export default authRouter

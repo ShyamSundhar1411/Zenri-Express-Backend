@@ -3,6 +3,7 @@ import { asyncHandler } from "../utils/asyncHandler"
 import {
   LoginRequest,
   LoginSchema,
+  RefreshTokenSchema,
   SignUpRequest,
   SignUpSchema
 } from "../domain/authSchema"
@@ -31,3 +32,12 @@ export const login: RequestHandler<
 
   res.status(result.statusCode).json(result)
 })
+
+export const getAccessTokenFromRefreshToken: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const data = RefreshTokenSchema.parse(req.body)
+    const result = await authService.getAccessTokenFromRefreshToken(data)
+    res.status(result.statusCode).json(result)
+  }
+)
+

@@ -1246,4 +1246,37 @@
  *           format: date-time
  *           example: "2025-10-15T12:00:00Z"
  */
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     # =====================
+ *     # Token Schemas
+ *     # =====================
+ *     RefreshTokenRequest:
+ *       type: object
+ *       required:
+ *         - refreshToken
+ *       properties:
+ *         refreshToken:
+ *           type: string
+ *           example: "def50200a73dbf49..."
+ *
+ *     Token:
+ *       type: object
+ *       required:
+ *         - accessToken
+ *         - refreshToken
+ *       properties:
+ *         accessToken:
+ *           type: string
+ *           description: Newly issued access token
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         refreshToken:
+ *           type: string
+ *           description: Newly issued refresh token
+ *           example: "def502007a8c42b9a3b3f5c4e6283b..."
+ */
+
 export {}

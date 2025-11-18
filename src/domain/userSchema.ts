@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { TokenSchema } from "./authSchema"
 
 export const UserSchema = z.object({
   id: z.string(),
@@ -11,10 +12,7 @@ export const UserSchema = z.object({
 
 export const UserSchemaWithTokens = z.object({
   user: UserSchema,
-  tokens: z.object({
-    accessToken: z.string(),
-    refreshToken: z.string()
-  })
+  tokens: TokenSchema,
 })
 
 export type UserWithToken = z.infer<typeof UserSchemaWithTokens>
