@@ -48,7 +48,7 @@ authRouter.post("/signup", signup)
  *       400:
  *         description: Bad request
  *       401:
- *         description: Invalid credentials
+ *         description: Invalid credential
  */
 authRouter.post("/login", login)
 /**
