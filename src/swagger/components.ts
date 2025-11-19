@@ -794,7 +794,7 @@
  *           example: "2025-11-01T12:00:00Z"
  *         paymentCycle:
  *           $ref: "#/components/schemas/PaymentCycle"
- *         subscriptionStatus:
+ *         status:
  *           $ref: "#/components/schemas/SubscriptionStatus"
  *         userId:
  *           type: string
