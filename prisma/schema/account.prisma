@@ -30,6 +30,7 @@ model BankAccount {
     id             String          @id @default(uuid())
     accountNumber  String          @unique @db.VarChar(20)
     accountType    AccountType     @relation(fields: [accountTypeId], references: [id])
+    currencyCode   String?         @default("INR")
     accountTypeId  String
     bankName       String
     balance        Decimal         @default(0.0)

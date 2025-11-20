@@ -14,6 +14,7 @@ export const BankAccountSchema = z.object({
   id: z.string(),
   accountNumber: z.string(),
   accountType: AccountTypeSchema,
+  currencyCode: z.string(),
   bankName: z.string(),
   balance: z.instanceof(Prisma.Decimal),
   userId: z.string(),
@@ -28,6 +29,7 @@ export const CreateBankAccountSchema = z.object({
     .min(6, "Account number must be at least 6 digits")
     .max(20, "Account number cannot exceed 20 digits"),
   accountType: z.string().min(1, "Account type is required"),
+  currencyCode: z.string().min(1, "Currency code is required"),
   bankName: z.string(),
   balance: z.number()
 })

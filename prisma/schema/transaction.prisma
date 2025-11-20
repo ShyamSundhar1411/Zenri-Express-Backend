@@ -20,15 +20,16 @@ enum CategoryType {
 }
 
 model Category {
-    id           String        @id @default(uuid())
-    categoryName String
-    categoryType CategoryType  @default(SYSTEM)
-    userId       String?
-    user         User?         @relation(fields: [userId], references: [id])
-    transactions Transaction[]
-    isDeleted    Boolean       @default(false)
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @updatedAt
+    id            String         @id @default(uuid())
+    categoryName  String
+    categoryType  CategoryType   @default(SYSTEM)
+    userId        String?
+    user          User?          @relation(fields: [userId], references: [id])
+    transactions  Transaction[]
+    isDeleted     Boolean        @default(false)
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    subscriptions Subscription[]
 }
 
 enum TransactionType {
@@ -102,6 +103,8 @@ model Subscription {
     expiresOn        DateTime           @default(now())
     lastBilledAt     DateTime
     nextBillingDate  DateTime
+    category         Category?          @relation(fields: [categoryId], references: [id])
+    categoryId       String?
     paymentCycle     PaymentCycle       @default(MONTHLY)
     status           SubscriptionStatus @default(SUBSCRIBED)
     userId           String

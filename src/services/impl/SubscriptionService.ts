@@ -11,13 +11,17 @@ export class SubscriptionService implements ISubscriptionService{
                 subscriptionName: subscriptionData.subscriptionName,
                 amount: subscriptionData.amount,
                 currencyCode: subscriptionData.currencyCode,
+                categoryId: subscriptionData.categoryId,
                 expiresOn: subscriptionData.expiresOn,
                 lastBilledAt: subscriptionData.lastBilledAt,
                 nextBillingDate: subscriptionData.nextBillingDate,
                 paymentCycle: subscriptionData.paymentCycle,
                 status: subscriptionData.subscriptionStatus,
                 userId: userId,
-              }  
+              },
+              include:{
+                category: true
+              }
             })
             return{
                 data: SubscriptionSchema.parse(subscription),
@@ -35,6 +39,9 @@ export class SubscriptionService implements ISubscriptionService{
             const subscriptions = await prismaClient.subscription.findMany({
                 where:{
                    userId:userId
+                },
+                include:{
+                    category: true
                 }
             })
             return {
@@ -58,6 +65,9 @@ export class SubscriptionService implements ISubscriptionService{
                 where:{
                     id: subscriptionId,
                     userId: userId
+                },
+                include:{
+                    category: true
                 }
             })
             if(!subscription){

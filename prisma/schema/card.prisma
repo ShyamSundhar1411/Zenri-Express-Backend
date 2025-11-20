@@ -9,6 +9,7 @@ model CreditCard {
     cardNumber     String          @unique @db.VarChar(19)
     cardNetwork    CardNetwork     @relation(fields: [cardNetworkId], references: [id])
     cardNetworkId  String
+    cardHolderName String?
     issuer         String
     limit          Decimal
     balance        Decimal         @default(0)
@@ -29,6 +30,7 @@ model DebitCard {
     cardNumber     String          @unique @db.VarChar(19)
     cardNetwork    CardNetwork     @relation(fields: [cardNetworkId], references: [id])
     cardNetworkId  String
+    cardHolderName String?
     paymentMethods PaymentMethod[]
     bankAccountId  String
     bankAccount    BankAccount     @relation(fields: [bankAccountId], references: [id])

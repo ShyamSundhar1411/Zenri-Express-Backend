@@ -44,9 +44,13 @@ export class CardService implements ICardService {
       const card = await prismaClient.debitCard.create({
         data: {
           cardNumber: data.cardNumber,
+          cardHolderName: data.cardHolderName,
           cardNetworkId: cardNetwork.id,
           bankAccountId: bankAccount.id,
           expiresAt: data.expiresAt
+        },
+        include: {
+          cardNetwork: true
         }
       })
       return {
@@ -86,11 +90,15 @@ export class CardService implements ICardService {
         data: {
           cardNumber: data.cardNumber,
           cardNetworkId: cardNetwork.id,
+          cardHolderName: data.cardHolderName,
           issuer: data.issuer,
           balance: data.balance,
           limit: data.limit,
           expiresAt: data.expiresAt,
           userId: userId
+        },
+        include: {
+          cardNetwork: true
         }
       })
       return {
@@ -116,13 +124,20 @@ export class CardService implements ICardService {
       const creditCards = await prismaClient.creditCard.findMany({
         where: {
           userId: userId
+        },
+        include: {
+          cardNetwork: true
         }
       })
       const debitCards = await prismaClient.debitCard.findMany({
         where: {
           bankAccount: {
             userId: userId
-          }
+          },
+
+        },
+        include: {
+          cardNetwork: true
         }
       })
       return {
@@ -146,6 +161,9 @@ export class CardService implements ICardService {
           bankAccount: {
             userId: userId
           }
+        },
+        include: {
+          cardNetwork: true
         }
       })
       if (debitCards.length == 0) {
@@ -170,6 +188,9 @@ export class CardService implements ICardService {
       const creditCards = await prismaClient.creditCard.findMany({
         where: {
           userId: userId
+        },
+        include: {
+          cardNetwork: true
         }
       })
       if (creditCards.length == 0) {
@@ -202,6 +223,9 @@ export class CardService implements ICardService {
           bankAccount: {
             userId: userId
           }
+        },
+        include:{
+          cardNetwork: true
         }
       })
       if (!debitCard) {
@@ -230,6 +254,9 @@ export class CardService implements ICardService {
         where: {
           id: cardId,
           userId: userId
+        },
+        include:{
+          cardNetwork: true
         }
       })
       if (!creditCard) {

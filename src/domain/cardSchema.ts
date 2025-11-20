@@ -14,6 +14,8 @@ export const CreditCardSchema = z.object({
   id: z.string(),
   cardNumber: z.string(),
   cardNetworkId: z.string(),
+  cardNetwork: CardNetworkSchema,
+  cardHolderName: z.string().nullable(),
   issuer: z.instanceof(Prisma.Decimal),
   balance: z.instanceof(Prisma.Decimal),
   expiresAt: z.coerce.date(),
@@ -26,6 +28,8 @@ export const DebitCardSchema = z.object({
   id: z.string(),
   cardNumber: z.string(),
   cardNetworkId: z.string(),
+  cardNetwork: CardNetworkSchema,
+  cardHolderName: z.string().nullable(),
   bankAccountId: z.string(),
   expiresAt: z.coerce.date(),
   status: CardStatus.default("ACTIVE"),
@@ -41,6 +45,7 @@ export const CardSchema = z.object({
 export const CreateDebitCardSchema = z.object({
   cardNumber: z.string(),
   cardNetwork: z.string(),
+  cardHolderName: z.string(),
   bankAccount: z.string(),
   expiresAt: z.coerce.date()
 })
@@ -48,6 +53,7 @@ export const CreateDebitCardSchema = z.object({
 export const CreateCreditCardSchema = z.object({
   cardNumber: z.string(),
   cardNetwork: z.string(),
+  cardHolderName: z.string(),
   issuer: z.string(),
   limit: z.number(),
   balance: z.number(),
