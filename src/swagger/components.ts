@@ -119,6 +119,9 @@
  *         bankName:
  *           type: string
  *           example: "Chase Bank"
+ *         currencyCode:
+ *           type: string
+ *           example: "INR"
  *         balance:
  *           type: number
  *           example: 2500.75
@@ -156,6 +159,7 @@
  *       required:
  *         - accountNumber
  *         - accountType
+ *         - currenyCode
  *         - bankName
  *         - balance
  *       properties:
@@ -169,6 +173,9 @@
  *         bankName:
  *           type: string
  *           example: "Chase Bank"
+ *         currencyCode:
+ *           type: string
+ *           example: "INR"
  *         balance:
  *           type: number
  *           example: 5000.75
@@ -201,9 +208,14 @@
  *         cardNumber:
  *           type: string
  *           example: "4111111111111111"
+ *         cardHolderName:
+ *           type: string
+ *           example: "John Doe"
  *         cardNetworkId:
  *           type: string
  *           example: "VISA"
+ *         cardNetwork:
+ *           $ref: "#/components/schemas/CardNetwork"
  *         issuer:
  *           type: string
  *           description: "Decimal value from Prisma"
@@ -238,6 +250,11 @@
  *         cardNumber:
  *           type: string
  *           example: "5123456789012345"
+ *         cardHolderName:
+ *           type: string
+ *           example: "John Doe"
+ *         cardNetwork:
+ *           $ref: "#/components/schemas/CardNetwork"
  *         cardNetworkId:
  *           type: string
  *           example: "MASTERCARD"
@@ -295,12 +312,16 @@
  *       required:
  *         - cardNumber
  *         - cardNetwork
+ *         - cardHolderName
  *         - bankAccount
  *         - expiresAt
  *       properties:
  *         cardNumber:
  *           type: string
  *           example: "5123456789012345"
+ *         cardHolderName:
+ *           type: string
+ *           example: "John Doe"
  *         cardNetwork:
  *           type: string
  *           example: "MASTERCARD"
@@ -318,6 +339,7 @@
  *       required:
  *         - cardNumber
  *         - cardNetwork
+ *         - cardHolderName
  *         - issuer
  *         - limit
  *         - balance
@@ -329,6 +351,9 @@
  *         cardNetwork:
  *           type: string
  *           example: "VISA"
+ *         cardHolderName:
+ *           type: string
+ *           example: "John Doe"
  *         issuer:
  *           type: string
  *           description: "Issuer of the credit card"
@@ -769,6 +794,8 @@
  *         subscriptionName:
  *           type: string
  *           example: "Netflix Premium Plan"
+ *         category:
+ *            $ref: "#/components/schemas/Category"
  *         amount:
  *           type: string
  *           description: "Decimal amount representing subscription cost (Prisma.Decimal)"
@@ -851,6 +878,7 @@
  *       required:
  *         - subscriptionName
  *         - amount
+ *         - categoryId
  *         - currencyCode
  *         - paymentCycle
  *         - subscriptionStatus
@@ -867,6 +895,9 @@
  *         currencyCode:
  *           type: string
  *           example: "INR"
+ *         categoryId:
+ *           type: string
+ *           example: "123456789"
  *         paymentCycle:
  *           $ref: "#/components/schemas/PaymentCycle"
  *         subscriptionStatus:
