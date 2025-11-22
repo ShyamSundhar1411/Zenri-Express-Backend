@@ -1020,7 +1020,7 @@
  *         paymentMethodTypeId:
  *           type: string
  *           example: "pmtype_001"
- *         paymentMethod:
+ *         paymentMethodType:
  *           $ref: '#/components/schemas/PaymentMethodType'        
  *         creditCardId:
  *           type: string

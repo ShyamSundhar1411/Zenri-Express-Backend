@@ -14,7 +14,7 @@ export const PaymentMethodTypesSchema = z.array(PaymentMethodTypeSchema)
 export const PaymentMethodSchema = z.object({
   id: z.string(),
   paymentMethodTypeId: z.string(),
-  paymentMethod: PaymentMethodTypeSchema,
+  paymentMethodType: PaymentMethodTypeSchema,
   creditCardId: z.string().nullable(),
   creditCard: CreditCardSchema.nullable(),
   debitCardId: z.string().nullable(),

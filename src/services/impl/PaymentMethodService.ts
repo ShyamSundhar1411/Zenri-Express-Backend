@@ -9,6 +9,12 @@ export class PaymentMethodService implements IPaymentMethodService{
             const paymentMethods = await prismaClient.paymentMethod.findMany({
                 where:{
                     userId: userId
+                },
+                include:{
+                    bankAccount: true,
+                    paymentMethodType: true,
+                    debitCard: true,
+                    creditCard: true
                 }
             })
             return {

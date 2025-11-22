@@ -13,7 +13,7 @@ export const AccountStatus = z.enum(["ACTIVE", "CLOSED", "FROZEN", "SUSPENDED"])
 export const BankAccountSchema = z.object({
   id: z.string(),
   accountNumber: z.string(),
-  accountType: AccountTypeSchema,
+  accountType: AccountTypeSchema.optional(),
   currencyCode: z.string(),
   bankName: z.string(),
   balance: z.instanceof(Prisma.Decimal),
