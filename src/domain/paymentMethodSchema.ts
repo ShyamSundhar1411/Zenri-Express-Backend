@@ -1,4 +1,6 @@
 import { z } from "zod"
+import { CreditCardSchema, DebitCardSchema } from "./cardSchema"
+import { BankAccountSchema } from "./accountSchema"
 
 export const PaymentMethodTypeSchema = z.object({
   id: z.string(),
@@ -12,9 +14,13 @@ export const PaymentMethodTypesSchema = z.array(PaymentMethodTypeSchema)
 export const PaymentMethodSchema = z.object({
   id: z.string(),
   paymentMethodTypeId: z.string(),
+  paymentMethod: PaymentMethodTypeSchema,
   creditCardId: z.string().nullable(),
+  creditCard: CreditCardSchema.nullable(),
   debitCardId: z.string().nullable(),
+  debitCard: DebitCardSchema.nullable(),
   bankAccountId: z.string().nullable(),
+  bankAccount: BankAccountSchema.nullable(),
   notes: z.string().nullable(),
   providerName: z.string().nullable(),
   externalHandle: z.string().nullable(),

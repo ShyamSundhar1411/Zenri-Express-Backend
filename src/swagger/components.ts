@@ -1020,18 +1020,26 @@
  *         paymentMethodTypeId:
  *           type: string
  *           example: "pmtype_001"
+ *         paymentMethod:
+ *           $ref: '#/components/schemas/PaymentMethodType'        
  *         creditCardId:
  *           type: string
  *           nullable: true
  *           example: "cc_001"
+ *         creditCard:
+ *           $ref: '#/components/schemas/CreditCard'  
  *         debitCardId:
  *           type: string
  *           nullable: true
  *           example: null
+ *         debitCard:
+ *           $ref: '#/components/schemas/DebitCard'
  *         bankAccountId:
  *           type: string
  *           nullable: true
  *           example: null
+ *         bankAccount:
+ *           $ref: '#/components/schemas/BankAccount'
  *         notes:
  *           type: string
  *           nullable: true

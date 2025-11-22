@@ -39,6 +39,12 @@ export class PaymentMethodService implements IPaymentMethodService{
                     userId: userId,
                     createdAt: now,
                     updatedAt: now
+                },
+                include:{
+                    paymentMethodType: true,
+                    creditCard: true,
+                    debitCard: true,
+                    bankAccount: true
                 }
             })
             return {
