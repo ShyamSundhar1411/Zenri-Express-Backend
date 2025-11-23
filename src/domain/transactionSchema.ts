@@ -10,6 +10,7 @@ export const TransactionSchema = z.object({
   categoryId: z.string(),
   ledgerId: z.string(),
   userId: z.string(),
+  transactedOn: z.coerce.date(),
   paymentMethodId: z.string().nullable(),
   description: z.string().nullable(),
   isDeleted: z.boolean(),
