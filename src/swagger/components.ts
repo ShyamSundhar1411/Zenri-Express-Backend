@@ -1230,6 +1230,8 @@
  *         categoryId:
  *           type: string
  *           example: "cat_001"
+ *         category:
+ *           $ref: "#/components/schemas/Category"
  *         ledgerId:
  *           type: string
  *           example: "led_001"

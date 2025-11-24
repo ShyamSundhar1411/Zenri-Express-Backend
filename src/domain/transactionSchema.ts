@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { Prisma } from "../generated/client"
+import { CategorySchema } from "./categorySchema"
 
 export const TransactionType = z.enum(["CREDIT", "DEBIT"])
 export const TransactionSchema = z.object({
@@ -8,6 +9,7 @@ export const TransactionSchema = z.object({
   currencyCode: z.string(),
   transactionType: TransactionType.default("DEBIT"),
   categoryId: z.string(),
+  category: CategorySchema,
   ledgerId: z.string(),
   userId: z.string(),
   transactedOn: z.coerce.date(),

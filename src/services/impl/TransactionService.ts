@@ -19,6 +19,9 @@ export class TransactionService implements ITransactionService {
         where: {
           id: transactionId,
           userId: userId
+        },
+        include:{
+          category: true
         }
       })
       return {
@@ -39,6 +42,9 @@ export class TransactionService implements ITransactionService {
       const transactions = await prismaClient.transaction.findMany({
         where: {
           userId: userId
+        },
+        include:{
+          category: true
         }
       })
       return {
@@ -63,6 +69,9 @@ export class TransactionService implements ITransactionService {
         where: {
           userId: userId,
           ledgerId: ledgerId
+        },
+        include:{
+          category: true
         }
       })
       return {
@@ -129,6 +138,9 @@ export class TransactionService implements ITransactionService {
             paymentMethodId: transactionData.paymentMethodId,
             transactedOn: transactionData.transactedOn,
           },
+          include:{
+            category: true
+          }
         });
 
         return transaction;
