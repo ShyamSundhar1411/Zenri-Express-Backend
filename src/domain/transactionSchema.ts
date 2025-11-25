@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { Prisma } from "../generated/client"
 import { CategorySchema } from "./categorySchema"
+import { PaymentMethodSchema } from "./paymentMethodSchema"
 
 export const TransactionType = z.enum(["CREDIT", "DEBIT"])
 export const TransactionSchema = z.object({
@@ -14,6 +15,7 @@ export const TransactionSchema = z.object({
   userId: z.string(),
   transactedOn: z.coerce.date(),
   paymentMethodId: z.string().nullable(),
+  paymentMethod: PaymentMethodSchema,
   description: z.string().nullable(),
   isDeleted: z.boolean(),
   createdAt: z.coerce.date(),

@@ -1241,6 +1241,8 @@
  *         paymentMethodId:
  *           type: string
  *           example: "pm_001"
+ *         paymentMethod:
+ *           $ref: "#/components/schemas/PaymentMethod"
  *         description:
  *           type: string
  *           example: "Grocery purchase"

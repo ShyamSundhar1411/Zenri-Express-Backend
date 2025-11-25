@@ -20,8 +20,13 @@ export class TransactionService implements ITransactionService {
           id: transactionId,
           userId: userId
         },
-        include:{
-          category: true
+        include: {
+          category: true,
+          paymentMethod: {
+            include: {
+              paymentMethodType: true
+            }
+          }
         }
       })
       return {
@@ -43,8 +48,9 @@ export class TransactionService implements ITransactionService {
         where: {
           userId: userId
         },
-        include:{
-          category: true
+        include: {
+          category: true,
+          paymentMethod: true
         }
       })
       return {
@@ -70,8 +76,13 @@ export class TransactionService implements ITransactionService {
           userId: userId,
           ledgerId: ledgerId
         },
-        include:{
-          category: true
+        include: {
+          category: true,
+          paymentMethod: {
+            include: {
+              paymentMethodType: true
+            }
+          }
         }
       })
       return {
@@ -125,7 +136,7 @@ export class TransactionService implements ITransactionService {
           });
         }
 
-        await processTransaction(tx,transactionData.paymentMethodId,transactionData.amount,transactionData.transactionType)
+        await processTransaction(tx, transactionData.paymentMethodId, transactionData.amount, transactionData.transactionType)
         const transaction = await tx.transaction.create({
           data: {
             amount: transactionData.amount,
@@ -138,8 +149,13 @@ export class TransactionService implements ITransactionService {
             paymentMethodId: transactionData.paymentMethodId,
             transactedOn: transactionData.transactedOn,
           },
-          include:{
-            category: true
+          include: {
+            category: true,
+            paymentMethod: {
+            include: {
+              paymentMethodType: true
+            }
+          }
           }
         });
 
