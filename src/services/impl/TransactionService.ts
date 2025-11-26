@@ -27,7 +27,7 @@ export class TransactionService implements ITransactionService {
               paymentMethodType: true
             }
           }
-        }
+        },
       })
       return {
         data: TransactionSchema.parse(transaction),
@@ -51,6 +51,9 @@ export class TransactionService implements ITransactionService {
         include: {
           category: true,
           paymentMethod: true
+        },
+        orderBy: {
+          transactedOn: "desc"
         }
       })
       return {
@@ -144,6 +147,10 @@ export class TransactionService implements ITransactionService {
             userId,
             currencyCode: transactionData.currencyCode,
             transactionType: transactionData.transactionType,
+            subscriptionId:
+            transactionData.subscriptionId && transactionData.subscriptionId.trim() !== ""
+              ? transactionData.subscriptionId
+              : null,
             description: transactionData.description,
             categoryId: transactionData.categoryId,
             paymentMethodId: transactionData.paymentMethodId,

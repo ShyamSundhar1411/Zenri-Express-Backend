@@ -655,6 +655,9 @@
  *           type: string
  *           nullable: true
  *           example: "pm_11111"
+ *         subscriptionId:
+ *           type: string
+ *           nullable: true
  *         description:
  *           type: string
  *           nullable: true
@@ -713,6 +716,9 @@
  *         transactionType:
  *           $ref: "#/components/schemas/TransactionType"
  *         paymentMethodId:
+ *           type: string
+ *           example: "pm_11111"
+ *         subscriptionId:
  *           type: string
  *           example: "pm_11111"
  *         categoryId:

@@ -16,6 +16,7 @@ export const TransactionSchema = z.object({
   transactedOn: z.coerce.date(),
   paymentMethodId: z.string().nullable(),
   paymentMethod: PaymentMethodSchema,
+  subscriptionId: z.string().optional().nullable(),
   description: z.string().nullable(),
   isDeleted: z.boolean(),
   createdAt: z.coerce.date(),
