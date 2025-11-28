@@ -1,6 +1,6 @@
 import prismaClient from "../../config/prismaClient";
 import { ServiceResult } from "../../domain/interfaces";
-import { PaymentMethods, PaymentMethodCreateRequest, PaymentMethod, PaymentMethodSchema, PaymentMethodTypeSchema, PaymentMethodTypes } from "../../domain/paymentMethodSchema";
+import { PaymentMethods, PaymentMethodCreateRequest, PaymentMethod, PaymentMethodSchema, PaymentMethodTypeSchema, PaymentMethodTypes } from "../../domain/paymentMethod";
 import { IPaymentMethodService } from "../IPaymentMethodService";
 
 export class PaymentMethodService implements IPaymentMethodService{

@@ -2,7 +2,7 @@ import { Request, RequestHandler, Response } from "express";
 import { PaymentMethodService } from "../services/impl/PaymentMethodService";
 import { asyncHandler } from "../utils/asyncHandler";
 import { AuthRequest } from "../domain/interfaces";
-import { PaymentMethodCreateRequestSchema } from "../domain/paymentMethodSchema";
+import { PaymentMethodCreateRequestSchema } from "../domain/paymentMethod";
 
 const paymentMethodService = new PaymentMethodService()
 

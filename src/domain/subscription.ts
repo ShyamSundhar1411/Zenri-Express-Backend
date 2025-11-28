@@ -1,6 +1,6 @@
 import {z} from "zod";
 import { Prisma } from "../generated";
-import { CategorySchema } from "./categorySchema";
+import { CategorySchema } from "./category";
 
 export const PaymentCycle = z.enum([
     "WEEKLY","MONTHLY","YEARLY"

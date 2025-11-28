@@ -1,5 +1,5 @@
 import { ServiceResult } from "../domain/interfaces";
-import { SubscriptionCreateRequest, Subscription, Subscriptions } from "../domain/subscriptionSchema";
+import { SubscriptionCreateRequest, Subscription, Subscriptions } from "../domain/subscription";
 
 export interface ISubscriptionService{
     getMySubscriptions(userId: string): Promise<ServiceResult<Subscriptions>>

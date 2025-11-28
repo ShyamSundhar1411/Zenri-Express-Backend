@@ -6,7 +6,7 @@ import {
   BankAccountSchema,
   BankAccount,
   CreateBankAccountRequest
-} from "../../domain/accountSchema"
+} from "../../domain/account"
 import { ServiceResult } from "../../domain/interfaces"
 import { IAccountService } from "../IAccountService"
 

@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { CreditCardSchema, DebitCardSchema } from "./cardSchema"
-import { BankAccountSchema } from "./accountSchema"
+import { CreditCardSchema, DebitCardSchema } from "./card"
+import { BankAccountSchema } from "./account"
 
 export const PaymentMethodTypeSchema = z.object({
   id: z.string(),

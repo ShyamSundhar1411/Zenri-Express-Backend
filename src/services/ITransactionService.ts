@@ -3,7 +3,7 @@ import {
   Transaction,
   TransactionCreateRequest,
   Transactions
-} from "../domain/transactionSchema"
+} from "../domain/transaction"
 
 export interface ITransactionService {
   getMyTransactions(userId: string): Promise<ServiceResult<Transactions>>

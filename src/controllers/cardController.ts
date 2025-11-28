@@ -7,7 +7,7 @@ import {
   CreateCreditCardSchema,
   CreateDebitCard,
   CreateDebitCardSchema
-} from "../domain/cardSchema"
+} from "../domain/card"
 
 const cardService = new CardService()
 

@@ -5,7 +5,7 @@ import {
   LedgerCreateRequest,
   Ledgers,
   LedgerSchema
-} from "../../domain/ledgerSchema"
+} from "../../domain/ledger"
 import { ILedgerService } from "../ILedgerService"
 
 export class LedgerService implements ILedgerService {

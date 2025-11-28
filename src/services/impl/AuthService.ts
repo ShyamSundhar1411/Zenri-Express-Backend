@@ -1,10 +1,10 @@
-import { LoginRequest, RefreshTokenRequest, SignUpRequest, Token, TokenSchema } from "../../domain/authSchema"
+import { LoginRequest, RefreshTokenRequest, SignUpRequest, Token, TokenSchema } from "../../domain/auth"
 
 import { supabase } from "../../config/supabase"
 import { IAuthService } from "../IAuthService"
 
 import prismaClient from "../../config/prismaClient"
-import { UserSchemaWithTokens, UserWithToken } from "../../domain/userSchema"
+import { UserSchemaWithTokens, UserWithToken } from "../../domain/user"
 import { ServiceResult } from "../../domain/interfaces"
 import { access } from "fs"
 

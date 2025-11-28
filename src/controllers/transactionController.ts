@@ -2,7 +2,7 @@ import { RequestHandler, Response } from "express"
 import { AuthRequest } from "../domain/interfaces"
 import { TransactionService } from "../services/impl/TransactionService"
 import { asyncHandler } from "../utils/asyncHandler"
-import { TransactionCreateRequestSchema } from "../domain/transactionSchema"
+import { TransactionCreateRequestSchema } from "../domain/transaction"
 
 const transactionService = new TransactionService()
 

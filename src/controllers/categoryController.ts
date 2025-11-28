@@ -2,7 +2,7 @@ import { RequestHandler, Response } from "express"
 import { CategoryService } from "../services/impl/CategoryService"
 import { asyncHandler } from "../utils/asyncHandler"
 import { AuthRequest } from "../domain/interfaces"
-import { CategoryCreateRequestSchema } from "../domain/categorySchema"
+import { CategoryCreateRequestSchema } from "../domain/category"
 
 const categoryService = new CategoryService()
 

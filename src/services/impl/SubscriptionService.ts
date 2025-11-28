@@ -1,6 +1,6 @@
 import prismaClient from "../../config/prismaClient";
 import { ServiceResult } from "../../domain/interfaces";
-import { Subscriptions, Subscription, SubscriptionSchema, SubscriptionCreateRequest } from "../../domain/subscriptionSchema";
+import { Subscriptions, Subscription, SubscriptionSchema, SubscriptionCreateRequest } from "../../domain/subscription";
 import { ISubscriptionService } from "../ISubscriptionService";
 
 export class SubscriptionService implements ISubscriptionService{

@@ -2,7 +2,7 @@ import { RequestHandler, Response } from "express"
 import { LedgerService } from "../services/impl/LedgerService"
 import { asyncHandler } from "../utils/asyncHandler"
 import { AuthRequest } from "../domain/interfaces"
-import { LedgerCreateRequestSchema } from "../domain/ledgerSchema"
+import { LedgerCreateRequestSchema } from "../domain/ledger"
 
 const ledgerService = new LedgerService()
 

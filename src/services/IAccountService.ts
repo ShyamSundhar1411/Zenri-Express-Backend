@@ -3,7 +3,7 @@ import {
   BankAccount,
   BankAccounts,
   CreateBankAccountRequest
-} from "../domain/accountSchema"
+} from "../domain/account"
 import { ServiceResult } from "../domain/interfaces"
 
 export interface IAccountService {

@@ -5,7 +5,7 @@ import { AuthRequest } from "../domain/interfaces"
 import {
   CreateBankAccountRequest,
   CreateBankAccountSchema
-} from "../domain/accountSchema"
+} from "../domain/account"
 
 const accountService = new AccountService()
 

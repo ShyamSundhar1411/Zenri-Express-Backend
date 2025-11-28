@@ -5,7 +5,7 @@ import {
   CreateDebitCard,
   CreditCard,
   DebitCards
-} from "../domain/cardSchema"
+} from "../domain/card"
 import { ServiceResult } from "../domain/interfaces"
 import { DebitCard } from "../generated"
 

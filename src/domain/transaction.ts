@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { Prisma } from "../generated/client"
-import { CategorySchema } from "./categorySchema"
-import { PaymentMethodSchema } from "./paymentMethodSchema"
+import { CategorySchema } from "./category"
+import { PaymentMethodSchema } from "./paymentMethod"
 
 export const TransactionType = z.enum(["CREDIT", "DEBIT"])
 export const TransactionSchema = z.object({
@@ -22,7 +22,7 @@ export const TransactionSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
 })
-
+export const TransactionsSchema = z.array(TransactionSchema)
 export const TransactionCreateRequestSchema = z.object({
   amount: z.number(),
   currencyCode: z.string(),
@@ -34,7 +34,7 @@ export const TransactionCreateRequestSchema = z.object({
   transactedOn: z.coerce.date().default(new Date())
 })
 export type Transaction = z.infer<typeof TransactionSchema>
-export type Transactions = z.infer<(typeof TransactionSchema)[]>
+export type Transactions = z.infer<(typeof TransactionsSchema)>
 export type TransactionCreateRequest = z.infer<
   typeof TransactionCreateRequestSchema
 >

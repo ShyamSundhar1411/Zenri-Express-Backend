@@ -4,69 +4,75 @@ import {
   Transactions,
   TransactionCreateRequest,
   Transaction,
-  TransactionSchema
-} from "../../domain/transactionSchema"
+  TransactionSchema,
+  TransactionsSchema
+} from "../../domain/transaction"
+import { TransactionRepository } from "../../repository/impl/TransactionRepository"
 import { processTransaction } from "../../utils/transactionUtils"
 import { ITransactionService } from "../ITransactionService"
 
 export class TransactionService implements ITransactionService {
+  private transactionRepository = new TransactionRepository()
   async getTransactionById(
     userId: string,
     transactionId: string
   ): Promise<ServiceResult<Transaction>> {
-    try {
-      const transaction = await prismaClient.transaction.findUnique({
-        where: {
-          id: transactionId,
-          userId: userId
-        },
-        include: {
-          category: true,
-          paymentMethod: {
-            include: {
-              paymentMethodType: true
-            }
+    const repoResult = await this.transactionRepository.getTransactionById(
+      transactionId,
+      userId,
+      {
+        category: true,
+        paymentMethod: {
+          include: {
+            paymentMethodType: true
           }
-        },
-      })
-      return {
-        data: TransactionSchema.parse(transaction),
-        statusCode: 200
+        }
       }
-    } catch (error: any) {
+    )
+    if(repoResult.error){
+      if(repoResult.errorType === "NOT_FOUND"){
+        return {
+          error: repoResult.error,
+          statusCode: 404
+        }
+      }
       return {
-        error: error.message || error,
+        error: repoResult.error,
         statusCode: 400
+      
       }
+    }
+    return {
+      data: TransactionSchema.parse(repoResult.data),
+      statusCode:200
     }
   }
   async getMyTransactions(
     userId: string
   ): Promise<ServiceResult<Transactions>> {
-    try {
-      const transactions = await prismaClient.transaction.findMany({
-        where: {
-          userId: userId
-        },
-        include: {
-          category: true,
-          paymentMethod: true
-        },
-        orderBy: {
-          transactedOn: "desc"
+    const repoResult = await this.transactionRepository.getMyTransactions(
+      userId,
+      {
+        category: true,
+        paymentMethod: {
+          include: {
+            paymentMethodType: true
+          }
         }
-      })
-      return {
-        data: transactions.map((transaction) =>
-          TransactionSchema.parse(transaction)
-        ),
-        statusCode: 200
+      },
+      {
+        transactedOn: "desc"
       }
-    } catch (error: any) {
+    )
+    if (repoResult.error) {
       return {
-        error: error.message || error,
+        error: repoResult.error,
         statusCode: 400
       }
+    }
+    return {
+      data: TransactionsSchema.parse(repoResult.data),
+      statusCode: 200
     }
   }
   async getTransactionsByLedgerId(

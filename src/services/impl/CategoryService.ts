@@ -5,7 +5,7 @@ import {
   CategoryCreateRequest,
   CategorySchema,
   CategoryType
-} from "../../domain/categorySchema"
+} from "../../domain/category"
 import { ServiceResult } from "../../domain/interfaces"
 import { ICategoryService } from "../ICategoryService"
 

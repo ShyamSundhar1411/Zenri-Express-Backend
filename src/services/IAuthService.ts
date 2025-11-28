@@ -1,6 +1,6 @@
-import { LoginRequest, RefreshTokenRequest, SignUpRequest, Token } from "../domain/authSchema"
+import { LoginRequest, RefreshTokenRequest, SignUpRequest, Token } from "../domain/auth"
 import { ServiceResult } from "../domain/interfaces"
-import { UserWithToken } from "../domain/userSchema"
+import { UserWithToken } from "../domain/user"
 
 export interface IAuthService {
   signup(requestData: SignUpRequest): Promise<ServiceResult<UserWithToken>>

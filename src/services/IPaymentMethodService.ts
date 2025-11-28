@@ -1,5 +1,5 @@
 import { ServiceResult } from "../domain/interfaces";
-import { PaymentMethod, PaymentMethodCreateRequest, PaymentMethods, PaymentMethodTypes } from "../domain/paymentMethodSchema";
+import { PaymentMethod, PaymentMethodCreateRequest, PaymentMethods, PaymentMethodTypes } from "../domain/paymentMethod";
 
 export interface IPaymentMethodService{
     getMyPaymentMethods(userId: string): Promise<ServiceResult<PaymentMethods>>

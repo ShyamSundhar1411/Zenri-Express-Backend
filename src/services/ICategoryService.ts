@@ -1,4 +1,4 @@
-import { Categories, Category, CategoryCreateRequest } from "../domain/categorySchema"
+import { Categories, Category, CategoryCreateRequest } from "../domain/category"
 import { ServiceResult } from "../domain/interfaces"
 
 export interface ICategoryService {

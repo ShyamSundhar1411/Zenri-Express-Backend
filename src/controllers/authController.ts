@@ -6,7 +6,7 @@ import {
   RefreshTokenSchema,
   SignUpRequest,
   SignUpSchema
-} from "../domain/authSchema"
+} from "../domain/auth"
 import { AuthService } from "../services/impl/AuthService"
 
 const authService = new AuthService()

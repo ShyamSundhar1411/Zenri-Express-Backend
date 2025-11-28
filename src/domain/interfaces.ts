@@ -8,3 +8,16 @@ export interface ServiceResult<T> {
 export interface AuthRequest extends Request {
   userId?: string
 }
+
+export class RepositoryError extends Error {
+  constructor(message: string){
+    super(message);
+    this.name = "RepositoryError";
+  }
+}
+export type RepoErrorType = "NOT_FOUND" | "DB_ERROR";
+export interface RepoResult<T>{
+  data?: T;
+  error?: string;
+  errorType?: RepoErrorType;
+}

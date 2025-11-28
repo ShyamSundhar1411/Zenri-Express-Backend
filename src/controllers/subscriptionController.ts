@@ -2,7 +2,7 @@ import { RequestHandler, Response } from "express";
 import { SubscriptionService } from "../services/impl/SubscriptionService";
 import { asyncHandler } from "../utils/asyncHandler";
 import { AuthRequest } from "../domain/interfaces";
-import { SubscriptionCreateRequestSchema } from "../domain/subscriptionSchema";
+import { SubscriptionCreateRequestSchema } from "../domain/subscription";
 
 const subscriptionService = new SubscriptionService()
 
