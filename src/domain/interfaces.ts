@@ -15,7 +15,7 @@ export class RepositoryError extends Error {
     this.name = "RepositoryError";
   }
 }
-export type RepoErrorType = "NOT_FOUND" | "DB_ERROR";
+export type RepoErrorType = "NOT_FOUND" | "DB_ERROR" | "UNIQUE_CONSTRAINT_FAILED";
 export interface RepoResult<T>{
   data?: T;
   error?: string;

@@ -4,96 +4,70 @@ import {
   Ledger,
   LedgerCreateRequest,
   Ledgers,
-  LedgerSchema
+  LedgerSchema,
+  LedgersSchema
 } from "../../domain/ledger"
+import { LedgerRepository } from "../../repository/impl/LedgerRepository"
 import { ILedgerService } from "../ILedgerService"
 
 export class LedgerService implements ILedgerService {
+  private ledgerRepository = new LedgerRepository()
   async getLedgerById(
     userId: string,
     ledgerId: string
   ): Promise<ServiceResult<Ledger>> {
-    try {
-      const ledger = await prismaClient.ledger.findUnique({
-        where: {
-          userId: userId,
-          id: ledgerId
+    const repoResult = await this.ledgerRepository.getLedgerById(userId, ledgerId)
+    if (repoResult.error) {
+      if (repoResult.errorType === "NOT_FOUND") {
+        return {
+          error: repoResult.error,
+          statusCode: 404
         }
-      })
-      return {
-        data: LedgerSchema.parse(ledger),
-        statusCode: 200
       }
-    } catch (error: any) {
       return {
-        error: error.message || error,
+        error: repoResult.error,
         statusCode: 400
+
       }
+    }
+    return {
+      data: LedgerSchema.parse(repoResult.data),
+      statusCode: 200
     }
   }
 
   async getMyLedgers(userId: string): Promise<ServiceResult<Ledgers>> {
-    try {
-      const ledgers = await prismaClient.ledger.findMany({
-        where: { userId: userId }
-      })
-      if (ledgers.length == 0) {
-        return {
-          error: "No ledgers found",
-          statusCode: 200
-        }
-      }
+    const repoResult = await this.ledgerRepository.getMyLedgers(userId, null)
+    if (repoResult.error) {
       return {
-        data: ledgers.map((ledger) => LedgerSchema.parse(ledger)),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
     }
+    return {
+      data: LedgersSchema.parse(repoResult.data),
+      statusCode: 200
+    }
+
   }
 
   async createLedger(
     userId: string,
     ledgerData: LedgerCreateRequest
   ): Promise<ServiceResult<Ledger>> {
-    try {
-      const now = new Date()
-      const monthName =
-        ledgerData.month ?? now.toLocaleString("default", { month: "long" })
-      const year = ledgerData.year ?? now.getFullYear().toString()
-
-      const ledger = await prismaClient.ledger.findFirst({
-        where: {
-          month: monthName,
-          year: year,
-          userId: userId
-        }
-      })
-      if (ledger) {
-        return {
-          error: "Ledger already exists for this month",
-          statusCode: 400
-        }
-      }
-      const newLedger: Ledger = await prismaClient.ledger.create({
-        data: {
-          userId: userId,
-          month: monthName,
-          year: year
-        }
-      })
+    const repoResult = await this.ledgerRepository.createLedger(
+      userId,
+      ledgerData
+    )
+    if (repoResult.error) {
       return {
-        data: LedgerSchema.parse(newLedger),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
+    }
+    return {
+      data: LedgerSchema.parse(repoResult.data),
+      statusCode: 200
     }
   }
 }
