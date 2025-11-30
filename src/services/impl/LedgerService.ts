@@ -5,8 +5,12 @@ import {
   LedgerCreateRequest,
   Ledgers,
   LedgerSchema,
-  LedgersSchema
+  LedgersSchema,
+  PrismaLedgerWithTransactions,
+  TransactionMetadata
 } from "../../domain/ledger"
+import { Transaction } from "../../generated/client"
+
 import { LedgerRepository } from "../../repository/impl/LedgerRepository"
 import { ILedgerService } from "../ILedgerService"
 
@@ -35,17 +39,52 @@ export class LedgerService implements ILedgerService {
       statusCode: 200
     }
   }
+  _computeTransactionMetadata(ledger: PrismaLedgerWithTransactions): TransactionMetadata {
+    const credits = ledger.transactions.filter((t: Transaction) => t.transactionType === "CREDIT");
+    const debits = ledger.transactions.filter((t: Transaction) => t.transactionType === "DEBIT");
 
+
+    const totalCredits = credits.reduce((sum, t: Transaction) => sum + t.amount.toNumber(), 0);
+    const totalDebits = debits.reduce((sum, t: Transaction) => sum + t.amount.toNumber(), 0);
+
+    const netBalance = totalCredits - totalDebits;
+    const totalSavings = netBalance > 0 ? netBalance : 0;
+
+    const total = totalCredits + totalDebits;
+
+    return {
+      transactions: ledger.transactions.length,
+      savingPercentage: total === 0 ? 0 : (totalSavings / total) * 100,
+      netBalance,
+      totalCredits,
+      totalDebits,
+      totalSavings,
+      totalSavingsPercentage: total === 0 ? 0 : (totalSavings / total) * 100,
+      totalCreditsPercentage: total === 0 ? 0 : (totalCredits / total) * 100,
+      totalDebitsPercentage: total === 0 ? 0 : (totalDebits / total) * 100,
+    };
+  }
   async getMyLedgers(userId: string): Promise<ServiceResult<Ledgers>> {
-    const repoResult = await this.ledgerRepository.getMyLedgers(userId, null)
+    const repoResult = await this.ledgerRepository.getMyLedgers(userId,
+      {
+        transactions: true
+      }
+    )
     if (repoResult.error) {
       return {
         error: repoResult.error,
         statusCode: 400
       }
     }
+    const ledgers = repoResult.data as PrismaLedgerWithTransactions[];
+
+    
+    const enrichedLedgers = ledgers.map(ledger => ({
+      ...ledger,
+      transactionMetadata: this._computeTransactionMetadata(ledger)
+    }));
     return {
-      data: LedgersSchema.parse(repoResult.data),
+      data: LedgersSchema.parse(enrichedLedgers),
       statusCode: 200
     }
 

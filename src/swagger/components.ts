@@ -478,6 +478,49 @@
  *     # =====================
  *     # Ledger Schemas
  *     # =====================
+ *     TransactionMetadata:
+ *       type: object
+ *       description: "Computed metadata for a ledger."
+ *       properties:
+ *         transactions:
+ *           type: integer
+ *           example: 42
+ *           description: "Total number of transactions."
+ *         savingPercentage:
+ *           type: number
+ *           format: float
+ *           example: 30.5
+ *           description: "Percentage of net savings relative to total transactions."
+ *         netBalance:
+ *           type: number
+ *           format: float
+ *           example: 15000
+ *           description: "Net balance (credits - debits) for the ledger."
+ *         totalCredits:
+ *           type: number
+ *           format: float
+ *           example: 40000
+ *         totalDebits:
+ *           type: number
+ *           format: float
+ *           example: 25000
+ *         totalSavings:
+ *           type: number
+ *           format: float
+ *           example: 15000
+ *         totalSavingsPercentage:
+ *           type: number
+ *           format: float
+ *           example: 37.5
+ *         totalCreditsPercentage:
+ *           type: number
+ *           format: float
+ *           example: 61.5
+ *         totalDebitsPercentage:
+ *           type: number
+ *           format: float
+ *           example: 38.5
+ *
  *     Ledger:
  *       type: object
  *       title: Ledger
@@ -513,6 +556,9 @@
  *           format: date-time
  *           example: "2025-10-08T12:34:56Z"
  *           description: "Timestamp when the ledger was last updated."
+ *         metadata:
+ *           $ref: "#/components/schemas/TransactionMetadata"
+ *           description: "Computed metadata for this ledger."
  *       required:
  *         - id
  *         - month
@@ -525,7 +571,7 @@
  *     Ledgers:
  *       type: array
  *       title: Ledgers
- *       description: "List of ledger entries."
+ *       description: "List of ledger entries with metadata."
  *       items:
  *         $ref: "#/components/schemas/Ledger"
  *
