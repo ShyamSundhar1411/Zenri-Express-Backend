@@ -35,7 +35,6 @@ export const createTransaction: RequestHandler = asyncHandler(
       userId,
       transactionData
     )
-    console.log(result)
     return res.status(result.statusCode).json(result)
   }
 )
