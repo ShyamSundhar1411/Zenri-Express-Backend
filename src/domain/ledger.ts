@@ -3,14 +3,14 @@ import { Prisma } from "../generated/client"
 
 export const TransactionMetadataSchema = z.object({
   transactions: z.number(),
-  savingPercentage: z.number(),
   netBalance: z.number(),
   totalCredits: z.number(),
   totalDebits: z.number(),
   totalSavings: z.number(),
   totalSavingsPercentage: z.number(),
   totalCreditsPercentage: z.number(),
-  totalDebitsPercentage: z.number()
+  totalDebitsPercentage: z.number(),
+  currencyCode: z.string()
 })
 export const LedgerSchema = z.object({
   id: z.string(),

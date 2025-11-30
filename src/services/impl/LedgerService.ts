@@ -44,24 +44,25 @@ export class LedgerService implements ILedgerService {
     const debits = ledger.transactions.filter((t: Transaction) => t.transactionType === "DEBIT");
 
 
-    const totalCredits = credits.reduce((sum, t: Transaction) => sum + t.amount.toNumber(), 0);
-    const totalDebits = debits.reduce((sum, t: Transaction) => sum + t.amount.toNumber(), 0);
+    const totalCredits = Number(credits.reduce((sum, t: Transaction) => sum + t.amount.toNumber(), 0).toFixed(2));
+    const totalDebits = Number(debits.reduce((sum, t: Transaction) => sum + t.amount.toNumber(), 0).toFixed(2));
 
-    const netBalance = totalCredits - totalDebits;
+    const netBalance = Number((totalCredits - totalDebits).toFixed(2));
     const totalSavings = netBalance > 0 ? netBalance : 0;
 
     const total = totalCredits + totalDebits;
 
     return {
       transactions: ledger.transactions.length,
-      savingPercentage: total === 0 ? 0 : (totalSavings / total) * 100,
       netBalance,
       totalCredits,
       totalDebits,
       totalSavings,
-      totalSavingsPercentage: total === 0 ? 0 : (totalSavings / total) * 100,
-      totalCreditsPercentage: total === 0 ? 0 : (totalCredits / total) * 100,
-      totalDebitsPercentage: total === 0 ? 0 : (totalDebits / total) * 100,
+      totalSavingsPercentage: total === 0 ? 0 : Number(((totalSavings / total) * 100).toFixed(2)),
+      totalCreditsPercentage: total === 0 ? 0 : Number(((totalCredits / total) * 100).toFixed(2)),
+      totalDebitsPercentage: total === 0 ? 0 : Number(((totalDebits / total) * 100).toFixed(2)),
+      currencyCode: ledger.transactions[0]?.currencyCode || "INR"
+
     };
   }
   async getMyLedgers(userId: string): Promise<ServiceResult<Ledgers>> {

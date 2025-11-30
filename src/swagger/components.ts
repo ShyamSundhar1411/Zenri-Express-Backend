@@ -486,11 +486,6 @@
  *           type: integer
  *           example: 42
  *           description: "Total number of transactions."
- *         savingPercentage:
- *           type: number
- *           format: float
- *           example: 30.5
- *           description: "Percentage of net savings relative to total transactions."
  *         netBalance:
  *           type: number
  *           format: float
@@ -500,6 +495,9 @@
  *           type: number
  *           format: float
  *           example: 40000
+ *         currencyCode:
+ *           type: string
+ *           example: INR
  *         totalDebits:
  *           type: number
  *           format: float
@@ -556,7 +554,7 @@
  *           format: date-time
  *           example: "2025-10-08T12:34:56Z"
  *           description: "Timestamp when the ledger was last updated."
- *         metadata:
+ *         transactionMetadata:
  *           $ref: "#/components/schemas/TransactionMetadata"
  *           description: "Computed metadata for this ledger."
  *       required:
