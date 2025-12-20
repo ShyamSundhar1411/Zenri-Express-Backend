@@ -1,5 +1,5 @@
 import prismaClient from "../../config/prismaClient"
-import { ServiceResult } from "../../domain/interfaces"
+import { RepoError, ServiceResult } from "../../domain/interfaces"
 import {
   Ledger,
   LedgerCreateRequest,
@@ -22,7 +22,7 @@ export class LedgerService implements ILedgerService {
   ): Promise<ServiceResult<Ledger>> {
     const repoResult = await this.ledgerRepository.getLedgerById(userId, ledgerId)
     if (repoResult.error) {
-      if (repoResult.errorType === "NOT_FOUND") {
+      if (repoResult.errorType === RepoError.NOT_FOUND) {
         return {
           error: repoResult.error,
           statusCode: 404

@@ -2,292 +2,221 @@ import prismaClient from "../../config/prismaClient"
 import {
   Card,
   CardNetworks,
+  CardNetworksSchema,
   CardSchema,
   CreateCreditCard,
   CreateDebitCard,
   CreditCard,
   CreditCardSchema,
+  CreditCardsSchema,
   DebitCards,
-  DebitCardSchema
+  DebitCardSchema,
+  DebitCardsSchema
 } from "../../domain/card"
-import { ServiceResult } from "../../domain/interfaces"
+import { RepoError, ServiceResult } from "../../domain/interfaces"
 import { DebitCard } from "../../generated"
+import { CardRepository } from "../../repository/impl/CardRepository"
 import { ICardService } from "../ICardService"
 
 export class CardService implements ICardService {
+  private cardRepository = new CardRepository()
   async createDebitCard(
     userId: string,
     data: CreateDebitCard
   ): Promise<ServiceResult<DebitCard>> {
-    try {
-      const cardNetwork = await prismaClient.cardNetwork.findFirst({
-        where: { networkName: data.cardNetwork }
-      })
-      if (!cardNetwork) {
-        return {
-          error: "Card network not found",
-          statusCode: 400
-        }
-      }
-      const bankAccount = await prismaClient.bankAccount.findFirst({
-        where: {
-          userId: userId,
-          accountNumber: data.bankAccount
-        }
-      })
-      if (!bankAccount) {
-        return {
-          error: "Bank account not found",
-          statusCode: 400
-        }
-      }
-      const card = await prismaClient.debitCard.create({
-        data: {
-          cardNumber: data.cardNumber,
-          cardHolderName: data.cardHolderName,
-          cardNetworkId: cardNetwork.id,
-          bankAccountId: bankAccount.id,
-          expiresAt: data.expiresAt
-        },
-        include: {
+    const repoResult = await this.cardRepository.createDebitCard(
+      userId,
+      data,
+      {
+        debitCardFilter: {
+
           cardNetwork: true
-        }
-      })
+
+
+        },
+        creditCardFilter: null
+      }
+    )
+    if (repoResult.error) {
       return {
-        data: DebitCardSchema.parse(card),
-        statusCode: 201
+        error: repoResult.error,
+        statusCode: 400
       }
-    } catch (error: any) {
-      if (error.code === "P2002") {
-        return {
-          error: "Debit Card already exists",
-          statusCode: 400
-        }
-      }
-      return {
-        error: error.message || "Internal error",
-        statusCode: 500
-      }
+
     }
+    return {
+      data: DebitCardSchema.parse(repoResult.data),
+      statusCode: 201
+
+    }
+
   }
   async createCreditCard(
     userId: string,
     data: CreateCreditCard
   ): Promise<ServiceResult<CreditCard>> {
-    try {
-      const cardNetwork = await prismaClient.cardNetwork.findFirst({
-        where: {
-          networkName: data.cardNetwork
-        }
-      })
-      if (!cardNetwork) {
-        return {
-          error: "Card network not found",
-          statusCode: 400
-        }
-      }
-      const card = await prismaClient.creditCard.create({
-        data: {
-          cardNumber: data.cardNumber,
-          cardNetworkId: cardNetwork.id,
-          cardHolderName: data.cardHolderName,
-          issuer: data.issuer,
-          balance: data.balance,
-          limit: data.limit,
-          expiresAt: data.expiresAt,
-          userId: userId
-        },
-        include: {
+    const repoResult = await this.cardRepository.createCreditCard(
+      userId,
+      data,
+      {
+        debitCardFilter: null,
+        creditCardFilter: {
           cardNetwork: true
         }
-      })
+      }
+    )
+    if (repoResult.error) {
       return {
-        data: CreditCardSchema.parse(card),
-        statusCode: 201
+        error: repoResult.error,
+        statusCode: 400
       }
-    } catch (error: any) {
-      if (error.code === "P2002") {
-        return {
-          error: "Credit Card already exists",
-          statusCode: 400
-        }
-      }
-      return {
-        error: error.message || "Internal error",
-        statusCode: 500
-      }
+    }
+    return {
+      data: CreditCardSchema.parse(repoResult.data),
+      statusCode: 201
     }
   }
 
   async getMyCards(userId: string): Promise<ServiceResult<Card>> {
-    try {
-      const creditCards = await prismaClient.creditCard.findMany({
-        where: {
-          userId: userId
+    const repoResult = await this.cardRepository.getMyCards(
+      userId,
+      {
+        debitCardFilter: {
+          cardNetwork: true
         },
-        include: {
+        creditCardFilter: {
           cardNetwork: true
         }
-      })
-      const debitCards = await prismaClient.debitCard.findMany({
-        where: {
-          bankAccount: {
-            userId: userId
-          },
-
-        },
-        include: {
-          cardNetwork: true
-        }
-      })
-      return {
-        data: CardSchema.parse({
-          creditCards: creditCards,
-          debitCards: debitCards
-        }),
-        statusCode: 200
       }
-    } catch (error: any) {
+    )
+    if (repoResult.error) {
       return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
+    }
+    return {
+      data: CardSchema.parse(repoResult.data),
+      statusCode: 200
     }
   }
   async getMyDebitCards(userId: string): Promise<ServiceResult<DebitCards>> {
-    try {
-      const debitCards = await prismaClient.debitCard.findMany({
-        where: {
-          bankAccount: {
-            userId: userId
-          }
-        },
-        include: {
+    const repoResult = await this.cardRepository.getMyDebitCards(
+      userId,
+      {
+        debitCardFilter: {
           cardNetwork: true
-        }
-      })
-      if (debitCards.length == 0) {
-        return {
-          error: "No debit cards found",
-          statusCode: 200
-        }
+        },
+        creditCardFilter: null
       }
+    )
+    if (repoResult.error) {
       return {
-        data: debitCards.map((debitCard) => DebitCardSchema.parse(debitCard)),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
     }
+    return {
+      data: DebitCardsSchema.parse(repoResult.data),
+      statusCode: 200
+    }
   }
   async getMyCreditCards(userId: string): Promise<ServiceResult<CreditCard[]>> {
-    try {
-      const creditCards = await prismaClient.creditCard.findMany({
-        where: {
-          userId: userId
-        },
-        include: {
+    const repoResult = await this.cardRepository.getMyCreditCards(
+      userId,
+      {
+        debitCardFilter: null,
+        creditCardFilter: {
           cardNetwork: true
         }
-      })
-      if (creditCards.length == 0) {
-        return {
-          error: "No credit cards found",
-          statusCode: 200
-        }
       }
+    )
+    if (repoResult.error) {
       return {
-        data: creditCards.map((creditCard) =>
-          CreditCardSchema.parse(creditCard)
-        ),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
+    }
+    return {
+      data: CreditCardsSchema.parse(repoResult.data),
+      statusCode: 200
     }
   }
   async getDebitCardById(
     userId: string,
     cardId: string
   ): Promise<ServiceResult<DebitCard>> {
-    try {
-      const debitCard = await prismaClient.debitCard.findFirst({
-        where: {
-          id: cardId,
-          bankAccount: {
-            userId: userId
-          }
-        },
-        include:{
+    const repoResult = await this.cardRepository.getDebitCardById(
+      userId,
+      cardId,
+      {
+        debitCardFilter: {
           cardNetwork: true
-        }
-      })
-      if (!debitCard) {
+        },
+        creditCardFilter: null
+      }
+    )
+    if (repoResult.error) {
+      if (repoResult.errorType === RepoError.NOT_FOUND) {
         return {
-          error: "Debit card not found",
+          error: repoResult.error,
           statusCode: 404
         }
       }
       return {
-        data: DebitCardSchema.parse(debitCard),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
     }
+    return {
+      data: DebitCardSchema.parse(repoResult.data),
+      statusCode: 200
+    }
+
   }
   async getCreditCardById(
     userId: string,
     cardId: string
   ): Promise<ServiceResult<CreditCard>> {
-    try {
-      const creditCard = await prismaClient.creditCard.findFirst({
-        where: {
-          id: cardId,
-          userId: userId
-        },
-        include:{
+    const repoResult = await this.cardRepository.getCreditCardById(
+      userId,
+      cardId,
+      {
+        debitCardFilter: null,
+        creditCardFilter: {
           cardNetwork: true
         }
-      })
-      if (!creditCard) {
+      }
+    )
+    if (repoResult.error) {
+      if (repoResult.errorType === RepoError.NOT_FOUND) {
         return {
-          error: "Credit card not found",
+          error: repoResult.error,
           statusCode: 404
         }
       }
       return {
-        data: CreditCardSchema.parse(creditCard),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
     }
+    return {
+      data: CreditCardSchema.parse(repoResult.data),
+      statusCode: 200
+    
+    }
   }
   async getAllCardNetworks(): Promise<ServiceResult<CardNetworks>> {
-    try {
-      const cardNetworks = await prismaClient.cardNetwork.findMany()
+    const repoResult = await this.cardRepository.getAllCardNetworks()
+    if (repoResult.error) {
       return {
-        data: cardNetworks,
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error,
+        error: repoResult.error,
         statusCode: 400
       }
+    }
+    return {
+      data: CardNetworksSchema.parse(repoResult.data),
+      statusCode: 200
     }
   }
 }

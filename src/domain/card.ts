@@ -59,14 +59,16 @@ export const CreateCreditCardSchema = z.object({
   balance: z.number(),
   expiresAt: z.coerce.date()
 })
-
+export const DebitCardsSchema = z.array(DebitCardSchema)
+export const CreditCardsSchema = z.array(CreditCardSchema)
+export const CardNetworksSchema = z.array(CardNetworkSchema)
 export type CardNetwork = z.infer<typeof CardNetworkSchema>
-export type CardNetworks = z.infer<(typeof CardNetworkSchema)[]>
+export type CardNetworks = z.infer<(typeof CardNetworksSchema)>
 export type CreditCard = z.infer<typeof CreditCardSchema>
-export type CreditCards = z.infer<(typeof CreditCardSchema)[]>
+export type CreditCards = z.infer<(typeof CreditCardsSchema)>
 export type CreateCreditCard = z.infer<typeof CreateCreditCardSchema>
 export type DebitCard = z.infer<typeof DebitCardSchema>
-export type DebitCards = z.infer<(typeof DebitCardSchema)[]>
+export type DebitCards = z.infer<(typeof DebitCardsSchema)>
 export type CreateDebitCard = z.infer<typeof CreateDebitCardSchema>
 
 export type Card = z.infer<typeof CardSchema>

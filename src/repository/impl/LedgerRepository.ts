@@ -1,5 +1,5 @@
 import prismaClient from "../../config/prismaClient";
-import { RepoResult } from "../../domain/interfaces";
+import { RepoError, RepoResult } from "../../domain/interfaces";
 import { LedgerCreateRequest } from "../../domain/ledger";
 import { Ledger, Prisma } from "../../generated";
 import { IledgerRepository } from "../ILedgerRepository";
@@ -20,7 +20,7 @@ export class LedgerRepository implements IledgerRepository {
         } catch (error: any) {
             return {
                 error: error.message || error,
-                errorType: "DB_ERROR"
+                errorType: RepoError.DB_ERROR
             }
         }
     }
@@ -57,7 +57,7 @@ export class LedgerRepository implements IledgerRepository {
         } catch (error: any) {
             return {
                 error: error.message || error,
-                errorType: "DB_ERROR"
+                errorType: RepoError.DB_ERROR
             }
         }
     }
@@ -69,9 +69,9 @@ export class LedgerRepository implements IledgerRepository {
                     userId: userId
                 }
             })
-            if(!ledger){
+            if (!ledger) {
                 return {
-                    errorType: "NOT_FOUND",
+                    errorType: RepoError.NOT_FOUND,
                     error: "Ledger not found"
                 }
             }
@@ -81,7 +81,7 @@ export class LedgerRepository implements IledgerRepository {
         } catch (error: any) {
             return {
                 error: error.message || error,
-                errorType: "DB_ERROR"
+                errorType: RepoError.DB_ERROR
             }
         }
     }
