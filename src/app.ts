@@ -8,9 +8,11 @@ import swaggerUi from "swagger-ui-express"
 import { swaggerSpec } from "./config/swagger"
 import zenriRouter from "./routes"
 import { errorHandler } from "./utils/errorHandler"
+import { cookieParserMiddleware } from "./middlewares/cookieParser"
 const app: Express = express()
 app.use(jsonParser)
 app.use(corsMiddleware)
+app.use(cookieParserMiddleware)
 app.use(helmetMiddleware)
 app.use(compressionMiddleware)
 // app.use(loggerMiddleware)

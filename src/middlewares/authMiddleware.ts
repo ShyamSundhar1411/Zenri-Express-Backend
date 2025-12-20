@@ -1,6 +1,6 @@
 import { AuthRequest } from "../domain/interfaces"
 import { Response, NextFunction } from "express"
-import { supabaseJWTEncodedSecretKey } from "../config/supabase"
+import { supabase, supabaseJWTEncodedSecretKey } from "../config/supabase"
 import prismaClient from "../config/prismaClient"
 import { jwtVerify, errors as JoseErrors } from "jose"
 
@@ -10,38 +10,75 @@ export class AuthMiddleware {
     res: Response,
     next: NextFunction
   ) => {
+    let accessToken: string | undefined = undefined;
+    let refreshToken: string | undefined = undefined;
     try {
-      const token = req.headers.authorization?.split(" ")[1]
-      if (!token) {
-        return res.status(401).json({ error: "Unauthorized" })
-      }
-
-      let payload
-      try {
-        const result = await jwtVerify(token, supabaseJWTEncodedSecretKey)
-        payload = result.payload
-      } catch (err: any) {
-        if (err instanceof JoseErrors.JWTExpired) {
-          return res.status(401).json({ error: "Token expired" })
+      accessToken = req.cookies.accessToken;
+      refreshToken = req.cookies.refreshToken;
+      let user;
+      if (accessToken) {
+        const { data, error } = await supabase.auth.getUser(accessToken);
+        if (!error && data.user) {
+          user = data.user;
         }
-        return res.status(401).json({ error: "Invalid token" })
+      }
+      if (!user && refreshToken) {
+        const { data: sessionData, error } = await supabase.auth.refreshSession({
+          refresh_token: refreshToken,
+        });
+
+        if (!error && sessionData.session) {
+          accessToken = sessionData.session.access_token;
+          refreshToken = sessionData.session.refresh_token;
+
+
+          res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            path: "/",
+          });
+          res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            path: "/",
+          });
+
+          user = sessionData.session.user;
+        }
+      }
+      if (!user) {
+        const authHeader = req.headers.authorization;
+        const bearerToken = authHeader?.startsWith("Bearer ")
+          ? authHeader.split(" ")[1]
+          : undefined;
+
+        if (bearerToken) {
+          const { data, error } = await supabase.auth.getUser(bearerToken);
+          if (!error && data.user) {
+            user = data.user;
+          }
+        }
       }
 
-      const userId = payload.sub as string
+   
+      if (!user) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      
       const prismaUser = await prismaClient.user.findFirst({
-        where: { supabaseUserId: userId }
-      })
+        where: { supabaseUserId: user.id },
+      });
+
       if (!prismaUser) {
-        return res
-          .status(403)
-          .json({ error: "User not registered in app database" })
+        return res.status(403).json({ error: "User not registered in app database" });
       }
 
-      req.userId = prismaUser.id
-      next()
-    } catch (error) {
-      console.error("AuthMiddleware error:", error)
-      return res.status(500).json({ error: "Internal authentication error" })
+      req.userId = prismaUser.id;
+      next();
+    } catch (err) {
+      console.error("AuthMiddleware error:", err);
+      return res.status(401).json({ error: "Internal authentication error" });
     }
   }
 }

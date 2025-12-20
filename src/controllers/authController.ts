@@ -18,7 +18,18 @@ export const signup: RequestHandler<
 > = asyncHandler(async (req: Request, res: Response) => {
   const validatedData = SignUpSchema.parse(req.body)
   const result = await authService.signup(validatedData)
-
+  if (result.error || !result.data) {
+    return res.status(result.statusCode).json({ error: result.error });
+  }
+  const { tokens } = result.data
+  res.cookie("accessToken", tokens.accessToken, {
+    httpOnly: true, sameSite: "strict",
+    path: "/",
+  })
+  res.cookie("refreshToken", tokens.refreshToken, {
+    httpOnly: true, sameSite: "strict",
+    path: "/",
+  })
   res.status(result.statusCode).json(result)
 })
 
@@ -29,7 +40,18 @@ export const login: RequestHandler<
 > = asyncHandler(async (req: Request, res: Response) => {
   const valdiatedData = LoginSchema.parse(req.body)
   const result = await authService.login(valdiatedData)
-
+  if (result.error || !result.data) {
+    return res.status(result.statusCode).json({ error: result.error });
+  }
+  const { tokens } = result.data
+  res.cookie("accessToken", tokens.accessToken, {
+    httpOnly: true, sameSite: "strict",
+    path: "/",
+  })
+  res.cookie("refreshToken", tokens.refreshToken, {
+    httpOnly: true, sameSite: "strict",
+    path: "/",
+  })
   res.status(result.statusCode).json(result)
 })
 
