@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { AuthMiddleware } from "../middlewares/authMiddleware";
 import { createSubscription, getMySubscriptions, getSubscriptionById } from "../controllers/subscriptionController";
+import { SubscriptionCreateRequestSchema } from "../domain/subscription";
+import { schemaValidator } from "../middlewares/schemaValidator";
 
 const subscriptionRouter:Router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -106,6 +108,6 @@ subscriptionRouter.get("/:subscriptionId", authMiddleware.authRequired, getSubsc
  *       409:
  *         description: Conflict - Subscription with the same name already exists
  */
-subscriptionRouter.post("/", authMiddleware.authRequired, createSubscription);
+subscriptionRouter.post("/", authMiddleware.authRequired, schemaValidator(SubscriptionCreateRequestSchema),createSubscription);
 
 export default subscriptionRouter;

@@ -27,8 +27,7 @@ export const getSubscriptionById: RequestHandler = asyncHandler(
 export const createSubscription: RequestHandler = asyncHandler(
     async(req: AuthRequest, res: Response) => {
         const userId = req.userId!
-        const validatedData = SubscriptionCreateRequestSchema.parse(req.body)
-        const result = await subscriptionService.createSubscription(userId,validatedData)
+        const result = await subscriptionService.createSubscription(userId,req.body)
         return res.status(result.statusCode).json(result)
     }
 )

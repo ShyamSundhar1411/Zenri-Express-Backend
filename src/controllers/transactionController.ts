@@ -29,11 +29,11 @@ export const getTransactionById: RequestHandler = asyncHandler(
 export const createTransaction: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!!
-    const transactionData = TransactionCreateRequestSchema.parse(req.body)
+   
     
     const result = await transactionService.createTransaction(
       userId,
-      transactionData
+      req.body
     )
     return res.status(result.statusCode).json(result)
   }

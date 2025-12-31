@@ -1,5 +1,7 @@
 import { Router } from "express"
 import { signup, login, getAccessTokenFromRefreshToken } from "../controllers/authController"
+import { schemaValidator } from "../middlewares/schemaValidator"
+import { LoginSchema, RefreshTokenSchema, SignUpSchema } from "../domain/auth"
 
 const authRouter: Router = Router()
 /**
@@ -23,7 +25,7 @@ const authRouter: Router = Router()
  *             schema:
  *               $ref: "#/components/schemas/SignupResponse"
  */
-authRouter.post("/signup", signup)
+authRouter.post("/signup", schemaValidator(SignUpSchema),signup)
 
 /**
  * @swagger
@@ -50,7 +52,7 @@ authRouter.post("/signup", signup)
  *       401:
  *         description: Invalid credential
  */
-authRouter.post("/login", login)
+authRouter.post("/login", schemaValidator(LoginSchema),login)
 /**
  * @swagger
  * /api/v1/auth/refresh-token:
@@ -79,5 +81,5 @@ authRouter.post("/login", login)
  *         description: Internal server error
  */
 
-authRouter.post("/refresh-token", getAccessTokenFromRefreshToken)
+authRouter.post("/refresh-token", schemaValidator(RefreshTokenSchema),getAccessTokenFromRefreshToken)
 export default authRouter

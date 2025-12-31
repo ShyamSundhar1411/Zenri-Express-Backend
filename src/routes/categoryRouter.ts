@@ -1,6 +1,8 @@
 import { Router } from "express"
 import { AuthMiddleware } from "../middlewares/authMiddleware"
 import { createCategory, getAllCategories } from "../controllers/categoryController"
+import { schemaValidator } from "../middlewares/schemaValidator"
+import { CategoryCreateRequestSchema } from "../domain/category"
 
 const categoryRouter: Router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -116,6 +118,6 @@ categoryRouter.get("/", authMiddleware.authRequired, getAllCategories)
  *                   type: integer
  *                   example: 500
  */
-categoryRouter.post("/", authMiddleware.authRequired, createCategory)
+categoryRouter.post("/", authMiddleware.authRequired,schemaValidator(CategoryCreateRequestSchema),createCategory)
 
 export default categoryRouter

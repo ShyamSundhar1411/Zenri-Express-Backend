@@ -6,6 +6,8 @@ import {
   getMyBankAccounts
 } from "../controllers/accountController"
 import { AuthMiddleware } from "../middlewares/authMiddleware"
+import { schemaValidator } from "../middlewares/schemaValidator"
+import { CreateBankAccountSchema } from "../domain/account"
 
 const accountRouter: Router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -85,6 +87,7 @@ accountRouter.get(
 accountRouter.post(
   "/bank-accounts",
   authMiddleware.authRequired,
+  schemaValidator(CreateBankAccountSchema),
   createBankAccount
 )
 

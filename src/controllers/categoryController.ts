@@ -17,8 +17,8 @@ export const getAllCategories: RequestHandler = asyncHandler(
 export const createCategory: RequestHandler = asyncHandler(
   async (req:AuthRequest, res:Response) => {
     const userId = req.userId!
-    const validatedData = CategoryCreateRequestSchema.parse(req.body)
-    const result  = await categoryService.createCategory(userId,validatedData)
+
+    const result  = await categoryService.createCategory(userId,req.body)
     return res.status(result.statusCode).json(result)
     
   }

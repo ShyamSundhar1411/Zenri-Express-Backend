@@ -31,9 +31,7 @@ export const createDebitCard: RequestHandler<
   CreateDebitCard
 > = asyncHandler(async (req: AuthRequest, res: Response) => {
   const userId = req.userId!
-
-  const parsedData = CreateDebitCardSchema.parse(req.body)
-  const result = await cardService.createDebitCard(userId, parsedData)
+  const result = await cardService.createDebitCard(userId, req.body)
   return res.status(result.statusCode).json(result)
 })
 
@@ -43,8 +41,7 @@ export const createCreditCard: RequestHandler<
   CreateCreditCard
 > = asyncHandler(async (req: AuthRequest, res: Response) => {
   const userId = req.userId!
-  const parsedData = CreateCreditCardSchema.parse(req.body)
-  const result = await cardService.createCreditCard(userId, parsedData)
+  const result = await cardService.createCreditCard(userId, req.body)
   return res.status(result.statusCode).json(result)
 })
 

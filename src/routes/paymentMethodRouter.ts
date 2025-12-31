@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { AuthMiddleware } from "../middlewares/authMiddleware";
 import { createPaymentMethod, getAllPaymentMethodTypes, getMyPaymentMethods } from "../controllers/paymentMethodController";
+import { PaymentMethodCreateRequestSchema } from "../domain/paymentMethod";
+import { schemaValidator } from "../middlewares/schemaValidator";
 
 const paymentMethodRouter: Router = Router();
 const authMiddleware  = new AuthMiddleware()
@@ -65,7 +67,7 @@ paymentMethodRouter.get("/", authMiddleware.authRequired, getMyPaymentMethods)
  *             
  */
 
-paymentMethodRouter.post("/", authMiddleware.authRequired, createPaymentMethod)
+paymentMethodRouter.post("/", authMiddleware.authRequired, schemaValidator(PaymentMethodCreateRequestSchema),createPaymentMethod)
 
 /**
  * @openapi

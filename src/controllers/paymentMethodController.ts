@@ -23,8 +23,8 @@ export const getMyPaymentMethods: RequestHandler = asyncHandler(
 export const createPaymentMethod: RequestHandler = asyncHandler(
     async(req:AuthRequest,res:Response) => {
         const userId = req.userId!
-        const validatedData = PaymentMethodCreateRequestSchema.parse(req.body)
-        const result = await paymentMethodService.createPaymentMethod(userId,validatedData)
+        
+        const result = await paymentMethodService.createPaymentMethod(userId,req.body)
         return res.status(result.statusCode).json(result)
     }
     

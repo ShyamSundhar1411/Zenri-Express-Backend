@@ -5,6 +5,8 @@ import {
   getMyTransactions,
   getTransactionById
 } from "../controllers/transactionController"
+import { schemaValidator } from "../middlewares/schemaValidator"
+import { TransactionCreateRequestSchema } from "../domain/transaction"
 
 const transactionRouter: Router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -108,7 +110,7 @@ transactionRouter.get(
  *       401:
  *         description: Unauthorized
  */
-transactionRouter.post("/", authMiddleware.authRequired, createTransaction)
+transactionRouter.post("/", authMiddleware.authRequired, schemaValidator(TransactionCreateRequestSchema),createTransaction)
 /**
  * @swagger
  * /api/v1/transactions/{ledgerId}:

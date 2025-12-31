@@ -10,6 +10,8 @@ import {
   getMyCreditCards,
   getMyDebitCards
 } from "../controllers/cardController"
+import { schemaValidator } from "../middlewares/schemaValidator"
+import { CreateCreditCardSchema, CreateDebitCardSchema } from "../domain/card"
 
 const cardRouter: Router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -138,7 +140,7 @@ cardRouter.get(
  *       401:
  *         description: Unauthorized
  */
-cardRouter.post("/debit", authMiddleware.authRequired, createDebitCard)
+cardRouter.post("/debit", authMiddleware.authRequired, schemaValidator(CreateDebitCardSchema),createDebitCard)
 /**
  * @swagger
  * /api/v1/cards/credit:
@@ -166,7 +168,7 @@ cardRouter.post("/debit", authMiddleware.authRequired, createDebitCard)
  *       401:
  *         description: Unauthorized
  */
-cardRouter.post("/credit", authMiddleware.authRequired, createCreditCard)
+cardRouter.post("/credit", authMiddleware.authRequired, schemaValidator(CreateCreditCardSchema),createCreditCard)
 /**
  * @swagger
  * /api/v1/cards/my-cards/debit/{id}:

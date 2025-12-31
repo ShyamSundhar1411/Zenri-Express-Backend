@@ -30,8 +30,7 @@ export const createBankAccount: RequestHandler<
   CreateBankAccountRequest
 > = asyncHandler(async (req: AuthRequest, res: Response) => {
   const userId = req.userId!
-  const parsedData = CreateBankAccountSchema.parse(req.body)
-  const result = await accountService.createBankAccount(userId, parsedData)
+  const result = await accountService.createBankAccount(userId, req.body)
   return res.status(result.statusCode).json(result)
 })
 

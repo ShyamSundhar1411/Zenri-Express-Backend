@@ -16,8 +16,8 @@ export const signup: RequestHandler<
   any,
   SignUpRequest
 > = asyncHandler(async (req: Request, res: Response) => {
-  const validatedData = SignUpSchema.parse(req.body)
-  const result = await authService.signup(validatedData)
+
+  const result = await authService.signup(req.body)
   if (result.error || !result.data) {
     return res.status(result.statusCode).json({ error: result.error });
   }
@@ -38,8 +38,7 @@ export const login: RequestHandler<
   any,
   LoginRequest
 > = asyncHandler(async (req: Request, res: Response) => {
-  const valdiatedData = LoginSchema.parse(req.body)
-  const result = await authService.login(valdiatedData)
+  const result = await authService.login(req.body)
   if (result.error || !result.data) {
     return res.status(result.statusCode).json({ error: result.error });
   }
@@ -57,8 +56,7 @@ export const login: RequestHandler<
 
 export const getAccessTokenFromRefreshToken: RequestHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = RefreshTokenSchema.parse(req.body)
-    const result = await authService.getAccessTokenFromRefreshToken(data)
+    const result = await authService.getAccessTokenFromRefreshToken(req.body)
     res.status(result.statusCode).json(result)
   }
 )

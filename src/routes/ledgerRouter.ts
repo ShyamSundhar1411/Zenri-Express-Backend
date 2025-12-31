@@ -1,6 +1,8 @@
 import { Router } from "express"
 import { AuthMiddleware } from "../middlewares/authMiddleware"
 import { createLedger, getMyLedgers } from "../controllers/ledgerController"
+import { schemaValidator } from "../middlewares/schemaValidator"
+import { LedgerCreateRequestSchema } from "../domain/ledger"
 
 const ledgerRouter: Router = Router()
 const authMiddlware = new AuthMiddleware()
@@ -116,5 +118,5 @@ ledgerRouter.get("/my-ledgers", authMiddlware.authRequired, getMyLedgers)
  *
  *
  */
-ledgerRouter.post("/", authMiddlware.authRequired, createLedger)
+ledgerRouter.post("/", authMiddlware.authRequired, schemaValidator(LedgerCreateRequestSchema),createLedger)
 export default ledgerRouter

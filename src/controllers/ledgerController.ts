@@ -25,8 +25,7 @@ export const getLedgerById: RequestHandler = asyncHandler(
 export const createLedger: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!!
-    const ledgerData = LedgerCreateRequestSchema.parse(req.body)
-    const result = await ledgerService.createLedger(userId, ledgerData)
+    const result = await ledgerService.createLedger(userId, req.body)
     return res.status(result.statusCode).json(result)
   }
 )
