@@ -160,7 +160,7 @@ export class TransactionService implements ITransactionService {
             description: transactionData.description,
             categoryId: transactionData.categoryId,
             paymentMethodId: transactionData.paymentMethodId,
-            transactedOn: transactionData.transactedOn,
+            transactedOn: new Date(transactionData.transactedOn),
           },
           include: {
             category: true,

@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { AuthMiddleware } from "../middlewares/authMiddleware"
-import { createLedger, getMyLedgers } from "../controllers/ledgerController"
+import { createLedger, getLedgerById, getMyLedgers } from "../controllers/ledgerController"
 import { schemaValidator } from "../middlewares/schemaValidator"
 import { LedgerCreateRequestSchema } from "../domain/ledger"
 
@@ -50,6 +50,72 @@ const authMiddlware = new AuthMiddleware()
  *                   example: 500
  */
 ledgerRouter.get("/my-ledgers", authMiddlware.authRequired, getMyLedgers)
+/**
+ * @swagger
+ * /api/v1/ledger/{ledgerId}:
+ *   get:
+ *     summary: Get details of a specific ledger by ID
+ *     tags:
+ *       - Ledger
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: ledgerId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the ledger to retrieve
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved ledger details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/GetLedgerByIdResponse"
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 401
+ *       404:
+ *         description: Ledger not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Ledger not found"
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 404
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 500
+ */
+ledgerRouter.get("/:ledgerId", authMiddlware.authRequired, getLedgerById)
+
+ledgerRouter.get("/:ledgerId",authMiddlware.authRequired,getLedgerById)
 /**
  * @openapi
  * /api/v1/ledger/:

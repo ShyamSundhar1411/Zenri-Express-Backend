@@ -1371,5 +1371,24 @@
  *           description: Newly issued refresh token
  *           example: "def502007a8c42b9a3b3f5c4e6283b..."
  */
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     GetLedgerByIdResponse:
+ *       type: object
+ *       properties:
+ *         data:
+ *           allOf:
+ *             - $ref: "#/components/schemas/Ledger"
+ *             # Optionally add transactions if you have a separate Transaction schema
+ *         error:
+ *           type: string
+ *           nullable: true
+ *           example: null
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ */
 
 export {}
