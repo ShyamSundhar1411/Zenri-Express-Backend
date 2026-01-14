@@ -16,7 +16,7 @@ export const CreditCardSchema = z.object({
   cardNetworkId: z.string(),
   cardNetwork: CardNetworkSchema.optional(),
   cardHolderName: z.string().nullable(),
-  issuer: z.instanceof(Prisma.Decimal),
+  issuer: z.string(),
   balance: z.instanceof(Prisma.Decimal),
   expiresAt: z.coerce.date(),
   userId: z.string(),
