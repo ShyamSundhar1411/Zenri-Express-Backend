@@ -518,6 +518,13 @@
  *           type: number
  *           format: float
  *           example: 38.5
+ *         numberOfCredits:
+ *           type: integer
+ *         numberOfDebits:
+ *           type: integer
+ *         avgExpense:
+ *           type: number
+ *           format: float
  *
  *     Ledger:
  *       type: object

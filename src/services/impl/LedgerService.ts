@@ -70,7 +70,10 @@ export class LedgerService implements ILedgerService {
       totalSavingsPercentage: total === 0 ? 0 : Number(((totalSavings / total) * 100).toFixed(2)),
       totalCreditsPercentage: total === 0 ? 0 : Number(((totalCredits / total) * 100).toFixed(2)),
       totalDebitsPercentage: total === 0 ? 0 : Number(((totalDebits / total) * 100).toFixed(2)),
-      currencyCode: ledger.transactions[0]?.currencyCode || "INR"
+      currencyCode: ledger.transactions[0]?.currencyCode || "INR",
+      numberOfCredits: credits.length,
+      numberOfDebits: debits.length,
+      avgExpense: (debits.length > 0 ? Number((totalDebits/30).toFixed(2)) : 0)
 
     };
   }

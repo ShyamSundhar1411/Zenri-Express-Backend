@@ -10,7 +10,10 @@ export const TransactionMetadataSchema = z.object({
   totalSavingsPercentage: z.number(),
   totalCreditsPercentage: z.number(),
   totalDebitsPercentage: z.number(),
-  currencyCode: z.string()
+  currencyCode: z.string(),
+  numberOfDebits: z.number(),
+  numberOfCredits: z.number(),
+  avgExpense: z.number()
 })
 export const LedgerSchema = z.object({
   id: z.string(),
