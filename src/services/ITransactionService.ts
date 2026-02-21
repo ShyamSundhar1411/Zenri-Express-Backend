@@ -2,6 +2,7 @@ import { ServiceResult } from "../domain/interfaces"
 import {
   Transaction,
   TransactionCreateRequest,
+  TransactionDetail,
   Transactions
 } from "../domain/transaction"
 
@@ -14,7 +15,7 @@ export interface ITransactionService {
   getTransactionsByLedgerId(
     userId: string,
     ledgerId: string
-  ): Promise<ServiceResult<Transactions>>
+  ): Promise<ServiceResult<TransactionDetail>>
   createTransaction(
     userId: string,
     transactionData: TransactionCreateRequest

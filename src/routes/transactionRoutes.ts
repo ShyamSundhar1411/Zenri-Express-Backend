@@ -115,7 +115,7 @@ transactionRouter.post("/", authMiddleware.authRequired, schemaValidator(Transac
  * @swagger
  * /api/v1/transactions/{ledgerId}:
  *   get:
- *     summary: Get all transactions for the given ledger ID
+ *     summary: Get all transactions and category breakdown for the given ledger ID
  *     tags:
  *       - Transactions
  *     security:
@@ -129,19 +129,11 @@ transactionRouter.post("/", authMiddleware.authRequired, schemaValidator(Transac
  *         description: The ID of the ledger whose transactions should be retrieved
  *     responses:
  *       200:
- *         description: Successfully fetched transactions
+ *         description: Successfully fetched transactions with category breakdown
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 transactions:
- *                   type: array
- *                   items:
- *                     $ref: "#/components/schemas/Transaction"
+ *               $ref: "#/components/schemas/TransactionDetailResponse"
  *       401:
  *         description: Unauthorized
  *       404:

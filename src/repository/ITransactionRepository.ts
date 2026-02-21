@@ -5,4 +5,6 @@ import { Prisma} from "../generated/client";
 export interface ITransactionRepository{
     getTransactionById(transactionId: string,userId: string, include: Prisma.TransactionInclude | null): Promise<RepoResult<Transaction>>
     getMyTransactions(userId: string,include: Prisma.TransactionInclude|null, orderBy: Prisma.TransactionOrderByWithRelationInput): Promise<RepoResult<Transaction[]>>
+    getTransactionsByLedgerId(userId: string,ledgerId: string, include: Prisma.TransactionInclude | null): Promise<RepoResult<Transaction[]>>
+    
 }

@@ -1396,6 +1396,72 @@
  *         statusCode:
  *           type: integer
  *           example: 200
+ *     CategoryBreakdown:
+ *       type: object
+ *       title: CategoryBreakdown
+ *       description: "Aggregated category analytics for transactions."
+ *       properties:
+ *         categoryName:
+ *           type: string
+ *           example: "Food"
+ *         totalAmount:
+ *           type: number
+ *           format: double
+ *           example: 5400.75
+ *         currencyCode:
+ *           type: string
+ *           example: "USD"
+ *         percentage:
+ *           type: number
+ *           format: float
+ *           example: 34.5
+ *         transactionCount:
+ *           type: integer
+ *           example: 12
+ *       required:
+ *         - categoryName
+ *         - totalAmount
+ *         - currencyCode
+ *         - percentage
+ *         - transactionCount
+ *
+ *     CategoriesBreakdown:
+ *       type: array
+ *       title: CategoriesBreakdown
+ *       items:
+ *         $ref: "#/components/schemas/CategoryBreakdown"
+ *
+ *     # =====================
+ *     # Transaction Detail
+ *     # =====================
+ *     TransactionDetail:
+ *       type: object
+ *       title: TransactionDetail
+ *       description: "Detailed transaction response with analytics."
+ *       properties:
+ *         transactions:
+ *           $ref: "#/components/schemas/Transactions"
+ *         categoryBreakdown:
+ *           $ref: "#/components/schemas/CategoriesBreakdown"
+ *       required:
+ *         - transactions
+ *         - categoryBreakdown
+ *
+ *     # =====================
+ *     # API Response Wrapper
+ *     # =====================
+ *     TransactionDetailResponse:
+ *       type: object
+ *       title: TransactionDetailResponse
+ *       description: "API response for transaction detail with category breakdown."
+ *       properties:
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ *         data:
+ *           $ref: "#/components/schemas/TransactionDetail"
+ *       required:
+ *         - statusCode
+ *         - data
  */
-
 export {}

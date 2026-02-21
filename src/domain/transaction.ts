@@ -22,7 +22,24 @@ export const TransactionSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
 })
+
+
+export const CategoryBreakdownSchema = z.object({
+  categoryName: z.string(),
+  totalAmount: z.number(),
+  currencyCode: z.string(),
+  percentage: z.number(),
+  transactionCount: z.number(),    
+});
+
+export const CategoriesBreakdownSchema = z.array(CategoryBreakdownSchema).optional()
+export const TransactionDetailSchema = z.object({
+  transactions: z.array(TransactionSchema).optional(),
+  categoryBreakdown: z.array(CategoryBreakdownSchema).optional()
+}) 
+
 export const TransactionsSchema = z.array(TransactionSchema)
+
 export const TransactionCreateRequestSchema = z.object({
   amount: z.number(),
   currencyCode: z.string(),
@@ -35,6 +52,8 @@ export const TransactionCreateRequestSchema = z.object({
 })
 export type Transaction = z.infer<typeof TransactionSchema>
 export type Transactions = z.infer<(typeof TransactionsSchema)>
+export type CategoryBreakdown = z.infer<typeof CategoryBreakdownSchema>
+export type TransactionDetail = z.infer<typeof TransactionDetailSchema>
 export type TransactionCreateRequest = z.infer<
   typeof TransactionCreateRequestSchema
 >

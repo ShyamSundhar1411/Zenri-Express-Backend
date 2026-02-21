@@ -5,7 +5,11 @@ import {
   TransactionCreateRequest,
   Transaction,
   TransactionSchema,
-  TransactionsSchema
+  TransactionsSchema,
+  CategoryBreakdown,
+  TransactionDetail,
+  CategoryBreakdownSchema,
+  CategoriesBreakdownSchema
 } from "../../domain/transaction"
 import { TransactionRepository } from "../../repository/impl/TransactionRepository"
 import { processTransaction } from "../../utils/transactionUtils"
@@ -29,8 +33,8 @@ export class TransactionService implements ITransactionService {
         }
       }
     )
-    if(repoResult.error){
-      if(repoResult.errorType === "NOT_FOUND"){
+    if (repoResult.error) {
+      if (repoResult.errorType === "NOT_FOUND") {
         return {
           error: repoResult.error,
           statusCode: 404
@@ -39,12 +43,12 @@ export class TransactionService implements ITransactionService {
       return {
         error: repoResult.error,
         statusCode: 400
-      
+
       }
     }
     return {
       data: TransactionSchema.parse(repoResult.data),
-      statusCode:200
+      statusCode: 200
     }
   }
   async getMyTransactions(
@@ -75,38 +79,76 @@ export class TransactionService implements ITransactionService {
       statusCode: 200
     }
   }
+  _computerCategoryBreakDown(transactions: Transaction[]): CategoryBreakdown[]{
+    const categoryMap = new Map<string, CategoryBreakdown>();
+    let totalSum = 0
+    transactions.forEach((transaction) => {
+      const existing = categoryMap.get(transaction.categoryId)
+      if(existing){
+        existing.totalAmount += transaction.amount.toNumber()
+        existing.transactionCount += 1
+      }
+      else{
+        categoryMap.set(transaction.categoryId, {
+          categoryName: transaction.category.categoryName,
+          totalAmount: transaction.amount.toNumber(),
+          currencyCode: transaction.currencyCode,
+          transactionCount: 1,
+          percentage: 0
+        })
+      }
+    })
+    const breakDown: CategoryBreakdown[] = Array.from(
+      categoryMap.values(
+
+      )
+    ).map((item) => ({
+      ...item,
+      percentage: totalSum > 0 ? Number(((item.totalAmount / totalSum) * 100).toFixed(2)) : 0,
+    }))
+    return breakDown;
+
+  }
   async getTransactionsByLedgerId(
     userId: string,
     ledgerId: string
-  ): Promise<ServiceResult<Transactions>> {
-    try {
-      const transactions = await prismaClient.transaction.findMany({
-        where: {
-          userId: userId,
-          ledgerId: ledgerId
-        },
-        include: {
-          category: true,
-          paymentMethod: {
-            include: {
-              paymentMethodType: true
-            }
+  ): Promise<ServiceResult<TransactionDetail>> {
+    const repoResult = await this.transactionRepository.getTransactionsByLedgerId(
+      userId,
+      ledgerId,
+      {
+        category: true,
+        paymentMethod: {
+          include: {
+            paymentMethodType: true
           }
         }
-      })
+      },
+    )
+    if (repoResult.error) {
       return {
-        data: transactions.map((transaction) =>
-          TransactionSchema.parse(transaction)
-        ),
-        statusCode: 200
-      }
-    } catch (error: any) {
-      return {
-        error: error.message || error,
+        error: repoResult.error,
         statusCode: 400
       }
     }
+    const transactions = TransactionsSchema.parse(repoResult.data)
+    const categoryBreakdown = this._computerCategoryBreakDown(transactions)
+    return {
+      data: {
+        
+        transactions: TransactionsSchema.parse(repoResult.data),
+        categoryBreakdown: CategoriesBreakdownSchema.parse(categoryBreakdown)
+
+      },
+      statusCode: 200
+    }
+  } catch(error: any) {
+    return {
+      error: error.message || error,
+      statusCode: 400
+    }
   }
+
   async createTransaction(
     userId: string,
     transactionData: TransactionCreateRequest
@@ -154,9 +196,9 @@ export class TransactionService implements ITransactionService {
             currencyCode: transactionData.currencyCode,
             transactionType: transactionData.transactionType,
             subscriptionId:
-            transactionData.subscriptionId && transactionData.subscriptionId.trim() !== ""
-              ? transactionData.subscriptionId
-              : null,
+              transactionData.subscriptionId && transactionData.subscriptionId.trim() !== ""
+                ? transactionData.subscriptionId
+                : null,
             description: transactionData.description,
             categoryId: transactionData.categoryId,
             paymentMethodId: transactionData.paymentMethodId,
@@ -165,10 +207,10 @@ export class TransactionService implements ITransactionService {
           include: {
             category: true,
             paymentMethod: {
-            include: {
-              paymentMethodType: true
+              include: {
+                paymentMethodType: true
+              }
             }
-          }
           }
         });
 

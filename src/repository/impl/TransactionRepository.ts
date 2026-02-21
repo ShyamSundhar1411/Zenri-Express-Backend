@@ -53,5 +53,23 @@ export class TransactionRepository implements ITransactionRepository {
             }
         }
     }
-
+    async getTransactionsByLedgerId(userId: string,ledgerId: string, include: Prisma.TransactionInclude | null): Promise<RepoResult<Transaction[]>> {
+        try{
+            const transactions = await this.db.transaction.findMany({
+                where: {
+                    ledgerId: ledgerId,
+                    userId: userId
+                },
+                include: include,
+            })
+            return {
+                data: transactions
+            }
+        }catch(error:any){
+            return {
+                error: error.message || error,
+                errorType: RepoError.DB_ERROR
+            }
+        }
+    }
 }
