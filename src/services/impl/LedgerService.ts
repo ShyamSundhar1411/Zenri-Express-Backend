@@ -1,3 +1,4 @@
+import { includes } from "zod"
 import prismaClient from "../../config/prismaClient"
 import { RepoError, ServiceResult } from "../../domain/interfaces"
 import {
@@ -20,7 +21,9 @@ export class LedgerService implements ILedgerService {
     userId: string,
     ledgerId: string
   ): Promise<ServiceResult<Ledger>> {
-    const repoResult = await this.ledgerRepository.getLedgerById(userId, ledgerId)
+    const repoResult = await this.ledgerRepository.getLedgerById(userId, ledgerId,{
+      transactions:true
+    })
     if (repoResult.error) {
       if (repoResult.errorType === RepoError.NOT_FOUND) {
         return {
@@ -34,8 +37,14 @@ export class LedgerService implements ILedgerService {
 
       }
     }
+    const ledger  = repoResult.data as PrismaLedgerWithTransactions
+    const enrichedLedger = {
+      ...ledger,
+      transactionMetadata: this._computeTransactionMetadata(ledger)
+      
+    }
     return {
-      data: LedgerSchema.parse(repoResult.data),
+      data: LedgerSchema.parse(enrichedLedger),
       statusCode: 200
     }
   }

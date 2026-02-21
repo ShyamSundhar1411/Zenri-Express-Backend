@@ -61,13 +61,14 @@ export class LedgerRepository implements IledgerRepository {
             }
         }
     }
-    async getLedgerById(userId: string, ledgerId: string): Promise<RepoResult<Ledger>> {
+    async getLedgerById(userId: string, ledgerId: string,include: Prisma.LedgerInclude | null): Promise<RepoResult<Ledger>> {
         try {
             const ledger = await prismaClient.ledger.findFirst({
                 where: {
                     id: ledgerId,
                     userId: userId
-                }
+                },
+                include:include
             })
             if (!ledger) {
                 return {
