@@ -50,6 +50,17 @@ export const TransactionCreateRequestSchema = z.object({
   description: z.string().nullable(),
   transactedOn: z.coerce.date().default(new Date())
 })
+
+export const TransactionUpdateRequest = z.object({
+  amount: z.number(),
+  currencyCode: z.string(),
+  transactionType: TransactionType.default("DEBIT"),
+  paymentMethodId: z.string(),
+  categoryId: z.string(),
+  subscriptionId: z.string().nullable().optional(),
+  description: z.string().nullable(),
+  transactedOn: z.coerce.date(),
+})
 export type Transaction = z.infer<typeof TransactionSchema>
 export type Transactions = z.infer<(typeof TransactionsSchema)>
 export type CategoryBreakdown = z.infer<typeof CategoryBreakdownSchema>
@@ -57,3 +68,7 @@ export type TransactionDetail = z.infer<typeof TransactionDetailSchema>
 export type TransactionCreateRequest = z.infer<
   typeof TransactionCreateRequestSchema
 >
+export type TransactionUpdateRequest = z.infer<
+  typeof TransactionUpdateRequest
+>
+

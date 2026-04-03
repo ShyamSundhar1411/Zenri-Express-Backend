@@ -3,7 +3,8 @@ import {
   Transaction,
   TransactionCreateRequest,
   TransactionDetail,
-  Transactions
+  Transactions,
+  TransactionUpdateRequest
 } from "../domain/transaction"
 
 export interface ITransactionService {
@@ -19,5 +20,11 @@ export interface ITransactionService {
   createTransaction(
     userId: string,
     transactionData: TransactionCreateRequest
+  ): Promise<ServiceResult<Transaction>>
+
+  updateTransaction(
+    userId: string,
+    transactionId: string,
+    transactionData: TransactionUpdateRequest
   ): Promise<ServiceResult<Transaction>>
 }

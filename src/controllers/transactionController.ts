@@ -50,3 +50,16 @@ export const getTransactionsByLedgerId: RequestHandler = asyncHandler(
     return res.status(result.statusCode).json(result)
   }
 )
+
+export const updateTransaction: RequestHandler = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const userId = req.userId!!
+    const transactionId = req.params.transactionId!!
+    const result = await transactionService.updateTransaction(
+      userId,
+      transactionId,
+      req.body
+    )
+    return res.status(result.statusCode).json(result)
+  }
+)

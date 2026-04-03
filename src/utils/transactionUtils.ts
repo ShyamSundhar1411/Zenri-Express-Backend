@@ -72,3 +72,21 @@ export async function processTransaction(tx: Prisma.TransactionClient,paymentMet
         throw new Error("Unsupported payment method type")
     }
 }
+
+export async function reverseTransaction(tx: Prisma.TransactionClient,paymentMethodId: string, amount: number, transactionType: TransactionType) {
+    const reversedType = transactionType === TransactionType.DEBIT ? TransactionType.CREDIT : TransactionType.DEBIT
+    await processTransaction(tx, paymentMethodId, amount, reversedType)
+}
+
+export async function updateTransactionBalance(
+    tx: Prisma.TransactionClient,
+    paymentMethodId: string,
+    oldAmount: number,
+    newAmount: number,
+){
+    if (oldAmount === newAmount) return;
+    const amountDifference = newAmount - oldAmount;
+    const isIncrease = amountDifference > 0;
+    const effectiveTransactionType = isIncrease ? TransactionType.DEBIT : TransactionType.CREDIT;
+    await processTransaction(tx, paymentMethodId, Math.abs(amountDifference), effectiveTransactionType)
+}
