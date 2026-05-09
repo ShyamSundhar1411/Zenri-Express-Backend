@@ -37,7 +37,7 @@ export const createBankAccount: RequestHandler<
 export const getBankAccountById: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!
-    const id = req.params.id!
+    const id = req.params.id! as string
     const result = await accountService.getBankAccountById(id, userId)
     return res.status(result.statusCode).json(result)
   }

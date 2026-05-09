@@ -64,7 +64,7 @@ export const getMyCreditCards: RequestHandler = asyncHandler(
 export const getDebitCardById: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!
-    const cardId = req.params.cardId!
+    const cardId = req.params.cardId! as string
     const result = await cardService.getDebitCardById(userId, cardId)
     return res.status(result.statusCode).json(result)
   }
@@ -73,7 +73,7 @@ export const getDebitCardById: RequestHandler = asyncHandler(
 export const getCreditCardById: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!
-    const cardId = req.params.cardId!
+    const cardId = req.params.cardId! as string
     const result = await cardService.getCreditCardById(userId, cardId)
     return res.status(result.statusCode).json(result)
   }

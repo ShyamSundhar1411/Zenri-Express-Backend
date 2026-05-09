@@ -18,7 +18,7 @@ export const getMySubscriptions: RequestHandler = asyncHandler(
 export const getSubscriptionById: RequestHandler = asyncHandler(
     async(req:AuthRequest,res: Response) => {
         const userId = req.userId!
-        const subscriptionId = req.params.subscriptionId!
+        const subscriptionId = req.params.subscriptionId! as string
         const result = await subscriptionService.getSubscriptionById(userId,subscriptionId)
         return res.status(result.statusCode).json(result)
     }

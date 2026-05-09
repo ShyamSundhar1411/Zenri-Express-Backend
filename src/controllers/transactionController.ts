@@ -17,7 +17,7 @@ export const getMyTransactions: RequestHandler = asyncHandler(
 export const getTransactionById: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!!
-    const transactionId = req.params.transactionId!!
+    const transactionId = req.params.transactionId!! as string
     const result = await transactionService.getTransactionById(
       userId,
       transactionId
@@ -42,7 +42,7 @@ export const createTransaction: RequestHandler = asyncHandler(
 export const getTransactionsByLedgerId: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!!
-    const ledgerId = req.params.ledgerId!!
+    const ledgerId = req.params.ledgerId!! as string
     const result = await transactionService.getTransactionsByLedgerId(
       userId,
       ledgerId
@@ -54,7 +54,7 @@ export const getTransactionsByLedgerId: RequestHandler = asyncHandler(
 export const updateTransaction: RequestHandler = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.userId!!
-    const transactionId = req.params.transactionId!!
+    const transactionId = req.params.transactionId!! as string
     const result = await transactionService.updateTransaction(
       userId,
       transactionId,

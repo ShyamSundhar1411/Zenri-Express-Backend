@@ -1,0 +1,68 @@
+model LoanType {
+  id           String   @id @default(uuid())
+  loanTypeName String   @unique
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  loans        Loan[]
+}
+enum LoanStatus {
+    ACTIVE
+    INACTIVE
+    REPAID
+    CLOSED
+    DEFAULTED
+}
+
+enum InterestRateType {
+    FIXED
+    FLOATING
+}
+
+enum MoratoriumInterestType {
+    SIMPLE
+    COMPOUND
+    NONE
+}
+
+model Loan {
+    id String @id @default(uuid())
+
+    loanName String
+
+    loanTypeId String
+    loanType   LoanType @relation(fields: [loanTypeId], references: [id])
+
+    sanctionedAmount Decimal
+    drawableLimit    Decimal?
+    currencyCode     String
+
+    interestRate     Decimal
+    interestRateType InterestRateType
+
+    marginPercentage Decimal
+
+    moratoriumMonths  Int
+    repaymentMonths   Int?
+    totalTenureMonths Int?
+
+    moratoriumInterestType MoratoriumInterestType?
+
+    sanctionDate       DateTime?
+    applicationDate    DateTime?
+    sanctionValidUntil DateTime?
+
+    processingFee    Decimal?
+    insurancePremium Decimal?
+
+    notes String?
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    status LoanStatus @default(ACTIVE)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
