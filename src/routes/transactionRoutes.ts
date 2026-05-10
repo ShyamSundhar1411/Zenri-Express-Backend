@@ -3,7 +3,8 @@ import { AuthMiddleware } from "../middlewares/authMiddleware"
 import {
   createTransaction,
   getMyTransactions,
-  getTransactionById
+  getTransactionById,
+  getTransactionsByLedgerId
 } from "../controllers/transactionController"
 import { schemaValidator } from "../middlewares/schemaValidator"
 import { TransactionCreateRequestSchema } from "../domain/transaction"
@@ -141,5 +142,5 @@ transactionRouter.post("/", authMiddleware.authRequired, schemaValidator(Transac
  *       500:
  *         description: Internal server error
  */
-transactionRouter.get("/:ledgerId", authMiddleware.authRequired, getTransactionById)
+transactionRouter.get("/:ledgerId", authMiddleware.authRequired, getTransactionsByLedgerId)
 export default transactionRouter

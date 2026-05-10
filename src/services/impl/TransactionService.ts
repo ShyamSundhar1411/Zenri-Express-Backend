@@ -114,6 +114,7 @@ export class TransactionService implements ITransactionService {
     userId: string,
     ledgerId: string
   ): Promise<ServiceResult<TransactionDetail>> {
+    console.log("Hey")
     const repoResult = await this.transactionRepository.getTransactionsByLedgerId(
       userId,
       ledgerId,
@@ -133,6 +134,7 @@ export class TransactionService implements ITransactionService {
       }
     }
     const transactions = TransactionsSchema.parse(repoResult.data)
+    console.log(transactions)
     const categoryBreakdown = this._computerCategoryBreakDown(transactions)
     return {
       data: {
