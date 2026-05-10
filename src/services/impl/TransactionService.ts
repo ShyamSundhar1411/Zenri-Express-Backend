@@ -85,6 +85,7 @@ export class TransactionService implements ITransactionService {
     let totalSum = 0
     transactions.forEach((transaction) => {
       const existing = categoryMap.get(transaction.categoryId)
+      totalSum += transaction.amount.toNumber()
       if (existing) {
         existing.totalAmount += transaction.amount.toNumber()
         existing.transactionCount += 1
@@ -106,7 +107,9 @@ export class TransactionService implements ITransactionService {
     ).map((item) => ({
       ...item,
       percentage: totalSum > 0 ? Number(((item.totalAmount / totalSum) * 100).toFixed(2)) : 0,
-    }))
+    })).sort(
+      (a,b) => b.percentage - a.percentage
+    )
     return breakDown;
 
   }
@@ -114,7 +117,6 @@ export class TransactionService implements ITransactionService {
     userId: string,
     ledgerId: string
   ): Promise<ServiceResult<TransactionDetail>> {
-    console.log("Hey")
     const repoResult = await this.transactionRepository.getTransactionsByLedgerId(
       userId,
       ledgerId,
@@ -134,7 +136,6 @@ export class TransactionService implements ITransactionService {
       }
     }
     const transactions = TransactionsSchema.parse(repoResult.data)
-    console.log(transactions)
     const categoryBreakdown = this._computerCategoryBreakDown(transactions)
     return {
       data: {
