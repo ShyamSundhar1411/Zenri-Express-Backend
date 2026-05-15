@@ -108,7 +108,7 @@ export class TransactionService implements ITransactionService {
       ...item,
       percentage: totalSum > 0 ? Number(((item.totalAmount / totalSum) * 100).toFixed(2)) : 0,
     })).sort(
-      (a,b) => b.percentage - a.percentage
+      (a, b) => b.percentage - a.percentage
     )
     return breakDown;
 
@@ -200,5 +200,30 @@ export class TransactionService implements ITransactionService {
       data: TransactionSchema.parse(repoResult.data),
       statusCode: 200
     }
+  }
+  async createBulkTransaction(userId: string, transactions: TransactionCreateRequest[]): Promise<ServiceResult<Transaction[]>> {
+    if (transactions.length === 0) {
+      return {
+        error: "No transactions provided",
+        statusCode: 400
+      }
+
+    }
+    const repoResult = await this.transactionRepository.createBulkTransactions(
+      userId,
+      transactions
+    )
+    if (repoResult.error) {
+      return {
+        error: repoResult.error,
+        statusCode: 400,
+      };
+    }
+
+    return {
+      data: TransactionsSchema.parse(repoResult.data),
+      statusCode: 201,
+    };
+
   }
 }

@@ -7,7 +7,76 @@ import { TransactionCreateRequest } from "../../domain/transaction";
 import { processTransaction, reverseTransaction } from "../../utils/transactionUtils";
 
 export class TransactionRepository implements ITransactionRepository {
+    
     private db = prismaClient;
+    private async _initiateTransaction(
+        tx: Prisma.TransactionClient,
+        userId: string,
+        transactionData: TransactionCreateRequest
+    ) {
+        const transactionDate = transactionData.transactedOn
+            ? new Date(transactionData.transactedOn)
+            : new Date();
+
+        if (isNaN(transactionDate.getTime())) {
+            throw new Error("Invalid date format in transactedOn");
+        }
+
+        const monthName = transactionDate.toLocaleString("default", {
+            month: "long",
+        });
+
+        const year = transactionDate.getFullYear().toString();
+
+        let ledger = await tx.ledger.findFirst({
+            where: {
+                userId,
+                month: monthName,
+                year,
+            },
+        });
+
+        if (!ledger) {
+            ledger = await tx.ledger.create({
+                data: {
+                    userId,
+                    month: monthName,
+                    year,
+                },
+            });
+        }
+
+        await processTransaction(
+            tx,
+            transactionData.paymentMethodId,
+            transactionData.amount,
+            transactionData.transactionType
+        );
+
+        return await tx.transaction.create({
+            data: {
+                amount: transactionData.amount,
+                ledgerId: ledger.id,
+                userId,
+                currencyCode: transactionData.currencyCode,
+                transactionType: transactionData.transactionType,
+                subscriptionId:
+                    transactionData.subscriptionId?.trim() || null,
+                description: transactionData.description,
+                categoryId: transactionData.categoryId,
+                paymentMethodId: transactionData.paymentMethodId,
+                transactedOn: transactionDate,
+            },
+            include: {
+                category: true,
+                paymentMethod: {
+                    include: {
+                        paymentMethodType: true,
+                    },
+                },
+            },
+        });
+    }
     async getTransactionById(transactionId: string, userId: string, include: Prisma.TransactionInclude | null): Promise<RepoResult<Transaction>> {
         try {
             const transaction = await this.db.transaction.findFirst({
@@ -80,69 +149,16 @@ export class TransactionRepository implements ITransactionRepository {
     ): Promise<RepoResult<Transaction>> {
 
         try {
-            const tranasction = await this.db.$transaction(
-                async (tx) => {
-                    const transactionDate = transactionData.transactedOn ? new Date(transactionData.transactedOn) : new Date();
-                    if (isNaN(transactionDate.getTime())) {
-                        throw new Error("Invalid date format in transactedOn");
-                    }
-                    const monthName = transactionDate.toLocaleString("default", {
-                        month: "long",
-                    });
-                    const year = transactionDate.getFullYear().toString();
-                    let ledger = await tx.ledger.findFirst({
-                        where: {
-                            userId,
-                            month: monthName,
-                            year,
-                        },
-                    });
-                    if (!ledger) {
-                        ledger = await tx.ledger.create({
-                            data: {
-                                userId,
-                                month: monthName,
-                                year,
-                            },
-                        });
-                    }
-                    await processTransaction(tx, transactionData.paymentMethodId, transactionData.amount, transactionData.transactionType)
-                    const transaction = await tx.transaction.create({
-                        data: {
-                            amount: transactionData.amount,
-                            ledgerId: ledger.id,
-                            userId,
-                            currencyCode: transactionData.currencyCode,
-                            transactionType: transactionData.transactionType,
-                            subscriptionId:
-                                transactionData.subscriptionId && transactionData.subscriptionId.trim() !== ""
-                                    ? transactionData.subscriptionId
-                                    : null,
-                            description: transactionData.description,
-                            categoryId: transactionData.categoryId,
-                            paymentMethodId: transactionData.paymentMethodId,
-                            transactedOn: new Date(transactionData.transactedOn),
-                        },
-                        include: {
-                            category: true,
-                            paymentMethod: {
-                                include: {
-                                    paymentMethodType: true
-                                }
-                            }
-                        }
-                    });
-                    return transaction;
-                }
-            )
+            const transaction = await this.db.$transaction((tx) =>
+                this._initiateTransaction(tx, userId, transactionData)
+            );
             return {
-                data: tranasction
+                data: transaction
             }
-        }
-        catch (error: any) {
+        } catch (error: any) {
             return {
-                error: error.message || error,
-                errorType: RepoError.DB_ERROR
+                errorType: RepoError.DB_ERROR,
+                error: error.message || error
             }
         }
     }
@@ -153,7 +169,7 @@ export class TransactionRepository implements ITransactionRepository {
                     id: transactionId,
                     userId: userId
                 }
-            }) 
+            })
             if (!existingTransaction) {
                 return {
                     errorType: RepoError.NOT_FOUND,
@@ -171,35 +187,58 @@ export class TransactionRepository implements ITransactionRepository {
 
                     }
                     return await tx.transaction.update({
-                    where: {
-                        id: transactionId
-                    },
-                    data: {
-                        amount: transactionData.amount,
-                        transactionType: transactionData.transactionType,
-                        currencyCode: transactionData.currencyCode,
-                        categoryId: transactionData.categoryId,
-                        paymentMethodId: transactionData.paymentMethodId,
-                        ...(transactionData.subscriptionId !== undefined && {
-                            subscriptionId: transactionData.subscriptionId
-                        }),
-                        transactedOn: transactionData.transactedOn,
-                        description: transactionData.description,
+                        where: {
+                            id: transactionId
+                        },
+                        data: {
+                            amount: transactionData.amount,
+                            transactionType: transactionData.transactionType,
+                            currencyCode: transactionData.currencyCode,
+                            categoryId: transactionData.categoryId,
+                            paymentMethodId: transactionData.paymentMethodId,
+                            ...(transactionData.subscriptionId !== undefined && {
+                                subscriptionId: transactionData.subscriptionId
+                            }),
+                            transactedOn: transactionData.transactedOn,
+                            description: transactionData.description,
 
-                    }
-                })
+                        }
+                    })
                 }
-                
+
             )
 
             return {
                 data: updatedTransaction
             }
-        } catch (error:any) {
+        } catch (error: any) {
             return {
                 error: error.message || error,
                 errorType: RepoError.DB_ERROR
             }
+        }
+    }
+    async createBulkTransactions(userId: string, transactions: TransactionCreateRequest[]): Promise<RepoResult<Transaction[]>> {
+        try {
+            const createdTransactions = await this.db.$transaction(
+                async (tx) => {
+                    const results: Transaction[] = [];
+                    for (const transactionData of transactions) {
+                        const transaction = await this._initiateTransaction(tx, userId, transactionData)
+                        results.push(transaction)
+                    }
+                    return results;
+                }
+            );
+
+            return {
+                data: createdTransactions,
+            };
+        } catch (error: any) {
+            return {
+                error: error.message || error,
+                errorType: RepoError.DB_ERROR,
+            };
         }
     }
 

@@ -9,5 +9,6 @@ export interface ITransactionRepository{
     getTransactionsByLedgerId(userId: string,ledgerId: string, include: Prisma.TransactionInclude | null): Promise<RepoResult<Transaction[]>>
     createTransaction(userId: string, transactionData: TransactionCreateRequest): Promise<RepoResult<Transaction>>
     updateTransaction(userId: string, transactionId: string, transactionData: TransactionCreateRequest): Promise<RepoResult<Transaction>>
+    createBulkTransactions(userId: string, transactions: TransactionCreateRequest[]): Promise<RepoResult<Transaction[]>>
     
 }

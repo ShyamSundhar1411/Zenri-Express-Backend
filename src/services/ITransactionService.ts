@@ -27,4 +27,9 @@ export interface ITransactionService {
     transactionId: string,
     transactionData: TransactionUpdateRequest
   ): Promise<ServiceResult<Transaction>>
+
+  createBulkTransaction(
+    userId: string,
+    transactions: TransactionCreateRequest[]
+  ): Promise<ServiceResult<Transaction[]>>
 }
