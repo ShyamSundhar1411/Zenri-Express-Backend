@@ -13,8 +13,8 @@ import {
   TransactionUpdateRequest
 } from "../../domain/transaction"
 import { TransactionRepository } from "../../repository/impl/TransactionRepository"
-import { processTransaction } from "../../utils/transactionUtils"
 import { ITransactionService } from "../ITransactionService"
+import { TransactionCsvRow } from "../../domain/transaction";
 
 export class TransactionService implements ITransactionService {
   private transactionRepository = new TransactionRepository()
@@ -201,7 +201,7 @@ export class TransactionService implements ITransactionService {
       statusCode: 200
     }
   }
-  async createBulkTransaction(userId: string, transactions: TransactionCreateRequest[]): Promise<ServiceResult<Transaction[]>> {
+  async createBulkTransaction(userId: string, transactions: TransactionCsvRow[]): Promise<ServiceResult<Transaction[]>> {
     if (transactions.length === 0) {
       return {
         error: "No transactions provided",
@@ -209,10 +209,10 @@ export class TransactionService implements ITransactionService {
       }
 
     }
-    const repoResult = await this.transactionRepository.createBulkTransactions(
-      userId,
-      transactions
-    )
+    // const repoResult = await this.transactionRepository.createBulkTransactions(
+    //   userId,
+    //   transactions
+    // )
     if (repoResult.error) {
       return {
         error: repoResult.error,

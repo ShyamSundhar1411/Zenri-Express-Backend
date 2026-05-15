@@ -4,11 +4,12 @@ import {
   createTransaction,
   getMyTransactions,
   getTransactionById,
-  getTransactionsByLedgerId
+  getTransactionsByLedgerId,
+  bulkUploadTransactions
 } from "../controllers/transactionController"
 import { schemaValidator } from "../middlewares/schemaValidator"
 import { TransactionCreateRequestSchema } from "../domain/transaction"
-
+import { multerCSVMiddleware } from "../middlewares/multerMiddleware"
 const transactionRouter: Router = Router()
 const authMiddleware = new AuthMiddleware()
 
@@ -143,4 +144,62 @@ transactionRouter.post("/", authMiddleware.authRequired, schemaValidator(Transac
  *         description: Internal server error
  */
 transactionRouter.get("/:ledgerId", authMiddleware.authRequired, getTransactionsByLedgerId)
+/**
+ * @swagger
+ * /api/v1/transactions/bulk-upload:
+ *   post:
+ *     summary: Bulk upload transactions using CSV
+ *     description: Upload a CSV file containing transactions. If one transaction fails validation or database processing, the entire import is rolled back.
+ *     tags:
+ *       - Transactions
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - csvFile
+ *             properties:
+ *               csvFile:
+ *                 type: string
+ *                 format: binary
+ *                 description: CSV file containing transaction records
+ *     responses:
+ *       201:
+ *         description: Transactions imported successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/components/schemas/Transaction"
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 201
+ *       400:
+ *         description: Invalid CSV format or transaction validation failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: CSV validation failed
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+transactionRouter.post(
+  "/bulk-upload",
+   authMiddleware.authRequired, 
+   multerCSVMiddleware.single("csvFile"), 
+   bulkUploadTransactions)
 export default transactionRouter

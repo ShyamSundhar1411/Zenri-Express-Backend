@@ -2,6 +2,7 @@ import { ServiceResult } from "../domain/interfaces"
 import {
   Transaction,
   TransactionCreateRequest,
+  TransactionCsvRow,
   TransactionDetail,
   Transactions,
   TransactionUpdateRequest
@@ -30,6 +31,6 @@ export interface ITransactionService {
 
   createBulkTransaction(
     userId: string,
-    transactions: TransactionCreateRequest[]
+    transactions: TransactionCsvRow[]
   ): Promise<ServiceResult<Transaction[]>>
 }
