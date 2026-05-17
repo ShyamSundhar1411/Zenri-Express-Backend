@@ -58,7 +58,7 @@ export const TransactionCsvRowSchema = z.object({
   categoryName: z.string().min(1),
   paymentMethodName: z.string().min(1),
   subscriptionName: z.string().nullable().optional(),
-  description: z.string().nullable().optional(),
+  description: z.string(),
   transactedOn: z.coerce.date().default(new Date()),
 });
 

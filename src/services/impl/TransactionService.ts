@@ -15,9 +15,15 @@ import {
 import { TransactionRepository } from "../../repository/impl/TransactionRepository"
 import { ITransactionService } from "../ITransactionService"
 import { TransactionCsvRow } from "../../domain/transaction";
+import { CategoryRepository } from "../../repository/impl/CategoryRepository"
+import { PaymentMethodRepository } from "../../repository/impl/PaymentMethodRepository"
+import { SubscriptionRepository } from "../../repository/impl/SubscriptionRepository"
 
 export class TransactionService implements ITransactionService {
   private transactionRepository = new TransactionRepository()
+  private categoryRepository = new CategoryRepository()
+  private paymentMethodRepository = new PaymentMethodRepository()
+  private subscriptionRepository = new SubscriptionRepository()
   async getTransactionById(
     userId: string,
     transactionId: string
@@ -201,6 +207,69 @@ export class TransactionService implements ITransactionService {
       statusCode: 200
     }
   }
+  async _constructTransactionCreateRequestFromCSV(transactions: TransactionCsvRow[], userId: string): Promise<ServiceResult<TransactionCreateRequest[]>> {
+    const mappedTransactions: TransactionCreateRequest[] = [];
+
+    for (const transaction of transactions) {
+      const category = await this.categoryRepository.getCategoryByName(
+        transaction.categoryName,
+        userId
+      );
+
+      if (category.error || !category.data) {
+        return {
+          error: `Category not found: ${transaction.categoryName}`,
+          statusCode: 400,
+        };
+      }
+
+      const paymentMethod =
+        await this.paymentMethodRepository.getPaymentMethodByQuery(
+          transaction.paymentMethodName,
+          userId
+        );
+
+      if (paymentMethod.error || !paymentMethod.data) {
+        return {
+          error: `Payment Method not found: ${transaction.paymentMethodName}`,
+          statusCode: 400,
+        };
+      }
+
+      let subscription = null;
+
+      if (transaction.subscriptionName) {
+        subscription =
+          await this.subscriptionRepository.getSubscriptionByName(
+            transaction.subscriptionName,
+            userId
+          );
+
+        if (subscription.error || !subscription.data) {
+          return {
+            error: `Subscription not found: ${transaction.subscriptionName}`,
+            statusCode: 400,
+          };
+        }
+      }
+
+      mappedTransactions.push({
+        amount: transaction.amount,
+        currencyCode: transaction.currencyCode,
+        transactionType: transaction.transactionType,
+        categoryId: category.data.id,
+        paymentMethodId: paymentMethod.data.id,
+        description: transaction.description,
+        subscriptionId: subscription?.data?.id ?? null,
+        transactedOn: transaction.transactedOn,
+      });
+    }
+
+    return {
+      data: mappedTransactions,
+      statusCode: 200,
+    };
+  }
   async createBulkTransaction(userId: string, transactions: TransactionCsvRow[]): Promise<ServiceResult<Transaction[]>> {
     if (transactions.length === 0) {
       return {
@@ -209,10 +278,20 @@ export class TransactionService implements ITransactionService {
       }
 
     }
-    // const repoResult = await this.transactionRepository.createBulkTransactions(
-    //   userId,
-    //   transactions
-    // )
+    const transactionRequest = await this._constructTransactionCreateRequestFromCSV(
+      transactions,
+      userId
+    )
+    if (transactionRequest.error || !transactionRequest.data) {
+      return {
+        error: transactionRequest.error ?? "Failed to construct transactions",
+        statusCode: transactionRequest.statusCode ?? 400,
+      };
+    }
+    const repoResult = await this.transactionRepository.createBulkTransactions(
+      userId,
+      transactionRequest.data
+    )
     if (repoResult.error) {
       return {
         error: repoResult.error,
